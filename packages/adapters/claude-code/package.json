@@ -1,0 +1,49 @@
+{
+  "name": "@katahq/adapter-claude-code",
+  "version": "0.1.0",
+  "description": "kata adapter for Claude Code (CLAUDE.md, .mcp.json)",
+  "keywords": [
+    "kata",
+    "adapter",
+    "agent",
+    "ai",
+    "config",
+    "mcp"
+  ],
+  "author": "Tiago Santos",
+  "license": "MIT",
+  "homepage": "https://github.com/tvcsantos/kata#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tvcsantos/kata.git",
+    "directory": "packages/adapters/claude-code"
+  },
+  "bugs": "https://github.com/tvcsantos/kata/issues",
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@katahq/core": "^0.1.0"
+  }
+}

@@ -1,0 +1,61 @@
+name: Deploy Pages (CI)
+
+# Builds the VitePress site and publishes it to GitHub Pages. Runs on pushes to
+# main that touch the docs (or the workflow itself), and can be run manually.
+# Requires Pages to be enabled with "Source: GitHub Actions" in repo settings.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "packages/docs/**"
+      - ".github/workflows/ci-deploy-pages.yml"
+  workflow_dispatch:
+
+# Allow one concurrent deployment; let an in-progress run finish.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build docs
+        run: npm run docs:build
+      
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: packages/docs/.vitepress/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,39 @@
+{
+  "name": "kata-monorepo",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "workspaces": [
+    "packages/core",
+    "packages/adapters/*",
+    "packages/cli",
+    "packages/docs"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "pretest": "npm run build",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "docs:dev": "npm run docs:dev -w @katahq/docs",
+    "docs:build": "npm run docs:build -w @katahq/docs",
+    "docs:preview": "npm run docs:preview -w @katahq/docs"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^24.0.0",
+    "eslint": "^10.6.0",
+    "eslint-config-prettier": "^10.1.8",
+    "prettier": "^3.9.4",
+    "tsup": "^8.3.0",
+    "typescript": "^5.6.0",
+    "typescript-eslint": "^8.63.0",
+    "vitest": "^3.0.0"
+  }
+}

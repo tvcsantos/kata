@@ -1,0 +1,52 @@
+{
+  "name": "@katahq/core",
+  "version": "0.1.0",
+  "description": "Core engine for kata: canonical schema, planner, applier, adapter interface",
+  "keywords": [
+    "agent",
+    "ai",
+    "config",
+    "mcp",
+    "claude-code",
+    "codex",
+    "cursor"
+  ],
+  "author": "Tiago Santos",
+  "license": "MIT",
+  "homepage": "https://github.com/tvcsantos/kata#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tvcsantos/kata.git",
+    "directory": "packages/core"
+  },
+  "bugs": "https://github.com/tvcsantos/kata/issues",
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "smol-toml": "^1.3.0",
+    "yaml": "^2.5.0",
+    "zod": "^4.0.0"
+  }
+}

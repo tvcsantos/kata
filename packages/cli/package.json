@@ -1,0 +1,76 @@
+{
+  "name": "@katahq/cli",
+  "version": "0.1.0",
+  "description": "One tool to configure all your AI harnesses / agents",
+  "keywords": [
+    "agent",
+    "ai",
+    "config",
+    "mcp",
+    "claude-code",
+    "codex",
+    "cursor"
+  ],
+  "author": "Tiago Santos",
+  "license": "MIT",
+  "homepage": "https://github.com/tvcsantos/kata#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tvcsantos/kata.git",
+    "directory": "packages/cli"
+  },
+  "bugs": "https://github.com/tvcsantos/kata/issues",
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "bin": {
+    "kata": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "oclif": {
+    "bin": "kata",
+    "dirname": "kata",
+    "commands": {
+      "strategy": "explicit",
+      "target": "./dist/command-registry.js",
+      "identifier": "COMMANDS"
+    },
+    "helpClass": "./dist/help.js",
+    "topicSeparator": " ",
+    "topics": {
+      "add": {
+        "description": "Add an artifact to .kata/"
+      },
+      "targets": {
+        "description": "Manage configured targets"
+      }
+    }
+  },
+  "scripts": {
+    "prebuild": "node scripts/generate-version.mjs",
+    "build": "tsup",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@katahq/adapter-claude-code": "^0.1.0",
+    "@katahq/adapter-codex": "^0.1.0",
+    "@katahq/adapter-copilot": "^0.1.0",
+    "@katahq/adapter-cursor": "^0.1.0",
+    "@katahq/adapter-gemini": "^0.1.0",
+    "@katahq/adapter-opencode": "^0.1.0",
+    "@katahq/adapter-vscode": "^0.1.0",
+    "@katahq/core": "^0.1.0",
+    "@oclif/core": "^4.11.14",
+    "diff": "^8.0.0",
+    "picocolors": "^1.1.0",
+    "yaml": "^2.5.0"
+  }
+}
