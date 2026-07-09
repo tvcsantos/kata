@@ -15,6 +15,7 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
+    name: Release
     steps:
       - name: Checkout
         uses: actions/checkout@v7
