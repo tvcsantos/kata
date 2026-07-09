@@ -38,15 +38,13 @@ overwritten.
 
 ## Quick start
 
-kata is not published to npm yet - build it from source:
+Install the CLI (requires Node ≥ 24):
 
 ```sh
-git clone https://github.com/tvcsantos/kata
-cd kata
-npm install
-npm run build
-npm link -w @katahq/cli   # puts `kata` on your PATH
+npm install -g @katahq/cli
 ```
+
+Or run it without installing: `npx @katahq/cli <command>`.
 
 Then, in a project you want to configure:
 

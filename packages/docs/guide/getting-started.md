@@ -6,18 +6,25 @@
 
 ## Install
 
-kata is not published to npm yet. Build it from source:
+```sh
+npm install -g @katahq/cli
+```
+
+This puts the `kata` command on your PATH. Or run it ad-hoc without installing:
+
+```sh
+npx @katahq/cli init
+```
+
+### From source
+
+To hack on kata itself:
 
 ```sh
 git clone https://github.com/tvcsantos/kata
 cd kata
 npm install
 npm run build
-```
-
-The CLI entry point is `packages/cli/dist/index.js`. For convenience, link it:
-
-```sh
 npm link -w @katahq/cli   # makes `kata` available on your PATH
 ```
 
