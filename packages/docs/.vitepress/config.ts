@@ -1,6 +1,6 @@
-import { defineConfig } from "vitepress";
+import { withMermaid } from "vitepress-plugin-mermaid";
 
-export default defineConfig({
+export default withMermaid({
   title: "kata",
   description: "One tool to configure all your AI harnesses / agents",
   // Served from a GitHub Pages project path: https://tvcsantos.github.io/kata/

@@ -1,5 +1,8 @@
 # What is kata?
 
+_**kata** - English /ˈkɑːtə/, Japanese 型 [ka̠ta̠] - a martial-arts form drilled
+until it's second nature._
+
 Every agent harness - Claude Code, Codex CLI, Gemini CLI, Cursor, Copilot CLI -
 supports customization: instruction files (`CLAUDE.md`, `AGENTS.md`,
 `.cursor/rules`), MCP server configs, prompts, skills, and settings. The
@@ -15,11 +18,21 @@ Babel or Terraform, but for agent configs.
 
 ## How it works
 
-```text
-.kata/                     native files (per target)
-  config.yaml         ┌────────┐    CLAUDE.md
-  instructions/*.md ──► kata ├──► .mcp.json
-  mcp/servers.yaml    └────────┘    AGENTS.md, .cursor/…  (planned)
+```mermaid
+flowchart LR
+  subgraph src [".kata/"]
+    direction TB
+    cfg["config.yaml"]
+    ins["instructions/*.md"]
+    mcp["mcp/servers.yaml"]
+  end
+
+  src -->|kata apply| kata(["kata"])
+
+  kata --> claude["CLAUDE.md · .mcp.json"]
+  kata --> codex["AGENTS.md · .codex/config.toml"]
+  kata --> cursor[".cursor/rules · .cursor/mcp.json"]
+  kata --> more["…"]
 ```
 
 1. You describe instructions and MCP servers once, in `.kata/`.
