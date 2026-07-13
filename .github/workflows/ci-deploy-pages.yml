@@ -24,8 +24,8 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
     name: Build
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -33,7 +33,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v6
         with:
-          node-version-file: .node-version
+          node-version-file: .nvmrc
           cache: npm
 
       - name: Install dependencies
@@ -43,21 +43,21 @@ jobs:
         run: npm run docs:build
       
       - name: Configure Pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
 
       - name: Upload Pages Artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: packages/docs/.vitepress/dist
 
   deploy:
+    name: Deploy
     needs: build
     runs-on: ubuntu-latest
-    name: Deploy
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5

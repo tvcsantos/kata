@@ -7,8 +7,9 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
     name: Build
+    runs-on: ubuntu-latest
+    
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -16,7 +17,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v6
         with:
-          node-version-file: .node-version
+          node-version-file: .nvmrc
           cache: npm
       
       - name: Install dependencies
