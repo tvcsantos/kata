@@ -85,7 +85,7 @@ jobs:
             const changedModules = JSON.parse(process.env.CHANGED_MODULES);
 
             // Only these workspaces are published to npm
-            const ignorePackages = ["@katahq/docs"];
+            const ignorePackages = ["kata-monorepo", "@katahq/docs"];
 
             const packages = changedModules
               .map((module) => module.name)
