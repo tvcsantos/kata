@@ -55,7 +55,6 @@
     }
   },
   "scripts": {
-    "prebuild": "node scripts/generate-version.mjs",
     "build": "tsup",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
