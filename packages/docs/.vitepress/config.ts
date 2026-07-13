@@ -5,7 +5,11 @@ export default withMermaid({
   description: "One tool to configure all your AI harnesses / agents",
   // Served from a GitHub Pages project path: https://tvcsantos.github.io/kata/
   base: "/kata/",
+  head: [
+    ["link", { rel: "icon", href: `/kata/favicon.ico` }],
+  ],
   themeConfig: {
+    logo: "/images/kata-logo-200.png",
     nav: [
       { text: "Guide", link: "/guide/what-is-kata" },
       { text: "Reference", link: "/reference/cli" },
@@ -34,7 +38,14 @@ export default withMermaid({
         },
       ],
     },
-    socialLinks: [{ icon: "github", link: "https://github.com/tvcsantos/kata" }],
+    socialLinks: [
+      { icon: "github", link: "https://github.com/tvcsantos/kata" },
+      { icon: "npm", link: "https://www.npmjs.com/package/@katahq/cli" },
+    ],
+    editLink: {
+      pattern: "https://github.com/tvcsantos/kata/edit/main/packages/docs/:path",
+      text: "Edit this page on GitHub",
+    },
     search: { provider: "local" },
     footer: {
       message: "Released under the MIT License.",
