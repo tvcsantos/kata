@@ -7,8 +7,8 @@
 > One tool to configure all your AI harnesses / agents.
 > Define it once, perform it everywhere!
 
-_**kata** - English /ˈkɑːtə/, Japanese 型 [ka̠ta̠] - a martial-arts form drilled
-until it's second nature._
+_**kata** - English /ˈkɑːtə/, Japanese 型 [ka̠ta̠] - a mold, model, or pattern:
+a standardized template that produces the same form every time._
 
 Every AI coding tool wants its own config: `CLAUDE.md`, `AGENTS.md`,
 `.cursor/rules`, `.mcp.json`, `.codex/config.toml`, and more. Keeping them in
@@ -18,7 +18,7 @@ sync by hand is tedious and error-prone.
 subagents once in a `.kata/` directory, then compiles them into each tool's
 native format - like Babel or Terraform, but for agent configs.
 
-- [Guide](./packages/docs/guide/what-is-kata.md) - what kata is and how it works
+- [Guide](./packages/docs/guide/getting-started.md) - what kata is and how to get started
 - [Kata format](./packages/docs/guide/kata-format.md) - everything `.kata/` supports
 - [CLI reference](./packages/docs/reference/cli.md) - every command and flag
 - [ROADMAP.md](./ROADMAP.md) - planned work

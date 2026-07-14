@@ -13,8 +13,8 @@ hero:
       text: Get started
       link: /guide/getting-started
     - theme: alt
-      text: What is kata?
-      link: /guide/what-is-kata
+      text: View on GitHub
+      link: https://github.com/tvcsantos/kata
 
 features:
   - icon: 🗂️

@@ -1,22 +1,7 @@
-# What is kata?
+# How kata works
 
-_**kata** - English /ˈkɑːtə/, Japanese 型 [ka̠ta̠] - a martial-arts form drilled
-until it's second nature._
-
-Every agent harness - Claude Code, Codex CLI, Gemini CLI, Cursor, Copilot CLI -
-supports customization: instruction files (`CLAUDE.md`, `AGENTS.md`,
-`.cursor/rules`), MCP server configs, prompts, skills, and settings. The
-concepts overlap heavily, but the file names, locations, and formats all
-diverge.
-
-Today, a customization written for one tool has to be manually ported to every
-other tool. That's error-prone, unscalable, and unshareable.
-
-**kata** gives you a single source of truth for agent
-customization, compiled by adapters into each tool's native format - think
-Babel or Terraform, but for agent configs.
-
-## How it works
+You describe your agent customization once, in a tool-agnostic `.kata/`
+directory. Adapters compile it into each tool's native files:
 
 ```mermaid
 flowchart LR

@@ -1,5 +1,21 @@
 # Getting started
 
+## What is kata?
+
+_**kata** - English /ˈkɑːtə/, Japanese 型 [ka̠ta̠] - a mold, model, or pattern:
+a standardized template that produces the same form every time._
+
+Every agent harness - Claude Code, Codex CLI, Cursor, Gemini CLI - supports the
+same customization concepts (instruction files, MCP servers, prompts, skills),
+but the file names, locations, and formats all diverge. A customization written
+for one tool has to be manually ported to every other - error-prone,
+unscalable, and unshareable.
+
+**kata** gives you a single source of truth in a `.kata/` directory and
+compiles it into each tool's native format - think Babel or Terraform, but for
+agent configs. Commit `.kata/` to your repo, and every teammate's preferred
+tool gets configured with one `kata apply`.
+
 ## Requirements
 
 - Node.js ≥ 24
@@ -93,6 +109,7 @@ Run `plan` again and it reports `No changes` - output is idempotent.
 
 ## Next steps
 
+- [How kata works](/guide/how-it-works) - the compile model, team story, and current status
 - [Kata format](/guide/kata-format) - everything `.kata/` supports
 - [Managed files](/guide/managed-files) - how hand edits are preserved
 - [CLI reference](/reference/cli)

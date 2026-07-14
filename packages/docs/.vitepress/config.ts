@@ -18,7 +18,7 @@ export default withMermaid({
   themeConfig: {
     logo: "/images/kata-logo-200.png",
     nav: [
-      { text: "Guide", link: "/guide/what-is-kata" },
+      { text: "Guide", link: "/guide/getting-started" },
       { text: "Reference", link: "/reference/cli" },
     ],
     sidebar: {
@@ -26,8 +26,8 @@ export default withMermaid({
         {
           text: "Guide",
           items: [
-            { text: "What is kata?", link: "/guide/what-is-kata" },
             { text: "Getting started", link: "/guide/getting-started" },
+            { text: "How kata works", link: "/guide/how-it-works" },
             { text: "Kata format", link: "/guide/kata-format" },
             { text: "Managed files", link: "/guide/managed-files" },
             { text: "Sharing & packages", link: "/guide/sharing" },
