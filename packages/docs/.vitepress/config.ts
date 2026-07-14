@@ -1,13 +1,20 @@
-import { withMermaid } from "vitepress-plugin-mermaid";
+import { withMermaid } from "vitepress-mermaid-viewer";
+import llmstxt, { copyOrDownloadAsMarkdownButtons } from "vitepress-plugin-llms";
 
 export default withMermaid({
   title: "kata",
   description: "One tool to configure all your AI harnesses / agents",
   // Served from a GitHub Pages project path: https://tvcsantos.github.io/kata/
   base: "/kata/",
-  head: [
-    ["link", { rel: "icon", href: `/kata/favicon.ico` }],
-  ],
+  head: [["link", { rel: "icon", href: `/kata/favicon.ico` }]],
+  vite: {
+    plugins: [llmstxt() as any],
+  },
+  markdown: {
+    config(md) {
+      md.use(copyOrDownloadAsMarkdownButtons);
+    },
+  },
   themeConfig: {
     logo: "/images/kata-logo-200.png",
     nav: [
