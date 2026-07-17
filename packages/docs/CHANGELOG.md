@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- Next Version Placeholder -->
 
+## [0.3.0](https://github.com/tvcsantos/kata/compare/@katahq/docs@0.2.0...@katahq/docs@0.3.0) - 2026-07-17
+
+### ✨ Features
+
+- Add support for monorepo bundles ([d553fd1](https://github.com/tvcsantos/kata/commit/d553fd12ccf41742b78ee060bdb7f1c1dd4acee3))
+
 ## [0.2.0](https://github.com/tvcsantos/kata/compare/@katahq/docs@0.1.1...@katahq/docs@0.2.0) - 2026-07-17
 
 ### ✨ Features
