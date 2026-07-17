@@ -34,7 +34,12 @@ const exec = promisify(execFile);
  */
 
 export type PackageSource =
-  | { kind: "git"; url: string }
+  | {
+      kind: "git";
+      url: string;
+      /** Bundle directory inside the repo, for monorepos of bundles. */
+      subdir?: string;
+    }
   | { kind: "npm"; packageName: string }
   | { kind: "path"; path: string };
 
@@ -50,16 +55,21 @@ function isGitUrl(reference: string): boolean {
 
 /**
  * Classify a user-supplied package reference: a git URL (optionally
- * `git+`-prefixed, as registries write them), `npm:<package>`, or a local
- * path (`./`, `../`, or absolute).
+ * `git+`-prefixed, as registries write them; `#path:<dir>` selects a
+ * bundle directory inside a monorepo), `npm:<package>`, or a local path
+ * (`./`, `../`, or absolute).
  */
 export function parsePackageSource(reference: string): PackageSource {
   if (reference.startsWith("npm:")) {
     return { kind: "npm", packageName: reference.slice("npm:".length) };
   }
-  const url = reference.startsWith("git+") ? reference.slice("git+".length) : reference;
+  const withoutScheme = reference.startsWith("git+") ? reference.slice("git+".length) : reference;
+  const pathMarker = withoutScheme.indexOf("#path:");
+  const url = pathMarker === -1 ? withoutScheme : withoutScheme.slice(0, pathMarker);
   if (isGitUrl(url)) {
-    return { kind: "git", url };
+    if (pathMarker === -1) return { kind: "git", url };
+    const subdir = withoutScheme.slice(pathMarker + "#path:".length).replace(/^\/+|\/+$/g, "");
+    return subdir === "" ? { kind: "git", url } : { kind: "git", url, subdir };
   }
   if (reference.startsWith("./") || reference.startsWith("../") || path.isAbsolute(reference)) {
     return { kind: "path", path: reference };
@@ -108,6 +118,8 @@ const VENDORED_SOURCE_FILE_NAME = ".kata-source.yaml";
 const vendoredSourceSchema = z.object({
   url: z.string(),
   commit: z.string().nullable().default(null),
+  /** Present when the bundle lives in a subdirectory of its repo. */
+  subdir: z.string().nullable().default(null),
 });
 
 export interface InstalledPackage {
@@ -249,7 +261,7 @@ async function removeComposeRef(rootDir: string, composeRef: string): Promise<bo
 
 async function readVendoredSource(
   dir: string,
-): Promise<{ url: string; commit: string | null } | null> {
+): Promise<{ url: string; commit: string | null; subdir: string | null } | null> {
   let raw: string;
   try {
     raw = await readFile(path.join(dir, VENDORED_SOURCE_FILE_NAME), "utf8");
@@ -260,8 +272,13 @@ async function readVendoredSource(
   return parsed.success ? parsed.data : null;
 }
 
-async function writeVendoredSource(dir: string, url: string, commit: string | null): Promise<void> {
-  const content = stringifyYaml({ url, commit });
+async function writeVendoredSource(
+  dir: string,
+  url: string,
+  commit: string | null,
+  subdir: string | null,
+): Promise<void> {
+  const content = stringifyYaml(subdir ? { url, commit, subdir } : { url, commit });
   await writeFile(path.join(dir, VENDORED_SOURCE_FILE_NAME), content, "utf8");
 }
 
@@ -341,7 +358,9 @@ export class KataProject {
       } else {
         const vendored = await readVendoredSource(pkg.dir);
         if (vendored) {
-          installed.source = { kind: "git", url: vendored.url };
+          installed.source = vendored.subdir
+            ? { kind: "git", url: vendored.url, subdir: vendored.subdir }
+            : { kind: "git", url: vendored.url };
           if (vendored.commit) installed.vendoredCommit = vendored.commit;
         } else {
           installed.source = { kind: "path", path: pkg.composeRef };
@@ -352,54 +371,10 @@ export class KataProject {
     return packages;
   }
 
+  /** Fetch, vendor, and wire up a package in one step (stage + confirm). */
   async install(source: PackageSource, options: InstallOptions = {}): Promise<InstallResult> {
-    if (source.kind === "npm") {
-      const composeRef = `npm:${source.packageName}`;
-      const pkg = await loadPackage(composeRef, this.rootDir);
-      const addedToCompose = await appendComposeRef(this.rootDir, composeRef);
-      return { package: pkg, composeRef, addedToCompose };
-    }
-
-    if (source.kind === "path") {
-      const absoluteDir = path.resolve(this.rootDir, source.path);
-      const composeRef = makeLocalComposeRef(this.rootDir, absoluteDir);
-      const pkg = await loadPackage(composeRef, this.rootDir);
-      const addedToCompose = await appendComposeRef(this.rootDir, composeRef);
-      return { package: pkg, composeRef, addedToCompose };
-    }
-
-    const slug = options.name ?? slugFromGitUrl(source.url);
-    const configDir = makeConfigDirPath(this.rootDir);
-    const absoluteDir = path.join(configDir, PACKAGES_DIR_NAME, slug);
-    const shownDir = displayAbsolutePath(this.rootDir, this.scope, absoluteDir);
-    if (await exists(absoluteDir)) {
-      if (!options.force) {
-        throw new Error(`${shownDir} already exists (use --force to replace it).`);
-      }
-      await rm(absoluteDir, { recursive: true, force: true });
-    }
-
-    await mkdir(path.dirname(absoluteDir), { recursive: true });
-    options.onProgress?.({ phase: "clone", url: source.url, destinationDir: absoluteDir });
-    const { commit } = await this.cloneGit(source.url, absoluteDir);
-
-    options.onProgress?.({ phase: "vendor", destinationDir: absoluteDir });
-    // Vendor the content: the package is committed with the repo, not a submodule.
-    await rm(path.join(absoluteDir, ".git"), { recursive: true, force: true });
-
-    options.onProgress?.({ phase: "verify", destinationDir: absoluteDir });
-    if (!(await exists(path.join(absoluteDir, PACKAGE_MANIFEST_NAME)))) {
-      await rm(absoluteDir, { recursive: true, force: true });
-      throw new Error(
-        `${source.url} is not an kata package (no ${PACKAGE_MANIFEST_NAME} at its root).`,
-      );
-    }
-    await writeVendoredSource(absoluteDir, source.url, commit);
-
-    const composeRef = makeLocalComposeRef(this.rootDir, absoluteDir);
-    const pkg = await loadPackage(composeRef, this.rootDir);
-    const addedToCompose = await appendComposeRef(this.rootDir, composeRef);
-    return { package: pkg, composeRef, addedToCompose, vendoredCommit: commit ?? undefined };
+    const staged = await this.stageInstall(source, options);
+    return (await staged.confirm()).install;
   }
 
   /**
@@ -419,28 +394,35 @@ export class KataProject {
     };
 
     return {
-      ...staged,
+      package: staged.package,
+      source: staged.source,
+      composeRef: staged.composeRef,
+      targetDir: staged.targetDir,
+      vendoredCommit: staged.vendoredCommit,
       plan,
       confirm: async (): Promise<StagedInstallResult> => {
         settle("confirmed or cancelled");
-        if (staged.stagingDir && staged.targetDir) {
+        if (staged.stagingRoot && staged.stagingContentDir && staged.targetDir) {
           if (await exists(staged.targetDir)) {
             if (!options.force) {
-              await rm(staged.stagingDir, { recursive: true, force: true });
+              await rm(staged.stagingRoot, { recursive: true, force: true });
               const shownDir = displayAbsolutePath(this.rootDir, this.scope, staged.targetDir);
               throw new Error(`${shownDir} already exists (use force to replace it).`);
             }
             await rm(staged.targetDir, { recursive: true, force: true });
           }
           await mkdir(path.dirname(staged.targetDir), { recursive: true });
-          await cp(staged.stagingDir, staged.targetDir, { recursive: true });
-          await rm(staged.stagingDir, { recursive: true, force: true });
+          await cp(staged.stagingContentDir, staged.targetDir, { recursive: true });
+          await rm(staged.stagingRoot, { recursive: true, force: true });
         }
         const addedToCompose = await appendComposeRef(this.rootDir, staged.composeRef);
         const apply = await applyPlan(plan);
         return {
           install: {
-            package: staged.package,
+            // The staging copy is gone; report the vendored location.
+            package: staged.targetDir
+              ? { ...staged.package, dir: staged.targetDir }
+              : staged.package,
             composeRef: staged.composeRef,
             addedToCompose,
             vendoredCommit: staged.vendoredCommit,
@@ -450,8 +432,8 @@ export class KataProject {
       },
       cancel: async (): Promise<void> => {
         settle("cancelled or confirmed");
-        if (staged.stagingDir) {
-          await rm(staged.stagingDir, { recursive: true, force: true });
+        if (staged.stagingRoot) {
+          await rm(staged.stagingRoot, { recursive: true, force: true });
         }
       },
     };
@@ -466,54 +448,76 @@ export class KataProject {
     source: PackageSource;
     composeRef: string;
     targetDir: string | null;
-    stagingDir: string | null;
+    /** The temp clone to discard; null when nothing was fetched. */
+    stagingRoot: string | null;
+    /** The bundle content inside the clone (the subdir for monorepos). */
+    stagingContentDir: string | null;
     vendoredCommit?: string;
   }> {
     if (source.kind === "npm") {
       const composeRef = `npm:${source.packageName}`;
       const pkg = await loadPackage(composeRef, this.rootDir);
-      return { package: pkg, source, composeRef, targetDir: null, stagingDir: null };
+      return {
+        package: pkg,
+        source,
+        composeRef,
+        targetDir: null,
+        stagingRoot: null,
+        stagingContentDir: null,
+      };
     }
 
     if (source.kind === "path") {
       const absoluteDir = path.resolve(this.rootDir, source.path);
       const composeRef = makeLocalComposeRef(this.rootDir, absoluteDir);
       const pkg = await loadPackage(composeRef, this.rootDir);
-      return { package: pkg, source, composeRef, targetDir: null, stagingDir: null };
+      return {
+        package: pkg,
+        source,
+        composeRef,
+        targetDir: null,
+        stagingRoot: null,
+        stagingContentDir: null,
+      };
     }
 
-    const slug = options.name ?? slugFromGitUrl(source.url);
+    const subdir = source.subdir ?? null;
+    const slug =
+      options.name ?? (subdir ? path.posix.basename(subdir) : slugFromGitUrl(source.url));
     const targetDir = path.join(makeConfigDirPath(this.rootDir), PACKAGES_DIR_NAME, slug);
     if (!options.force && (await exists(targetDir))) {
       const shownDir = displayAbsolutePath(this.rootDir, this.scope, targetDir);
       throw new Error(`${shownDir} already exists (use force to replace it).`);
     }
 
-    const stagingDir = await mkdtemp(path.join(os.tmpdir(), "kata-stage-"));
+    const stagingRoot = await mkdtemp(path.join(os.tmpdir(), "kata-stage-"));
     try {
-      options.onProgress?.({ phase: "clone", url: source.url, destinationDir: stagingDir });
-      const { commit } = await this.cloneGit(source.url, stagingDir);
-      options.onProgress?.({ phase: "vendor", destinationDir: stagingDir });
-      await rm(path.join(stagingDir, ".git"), { recursive: true, force: true });
-      options.onProgress?.({ phase: "verify", destinationDir: stagingDir });
-      if (!(await exists(path.join(stagingDir, PACKAGE_MANIFEST_NAME)))) {
+      options.onProgress?.({ phase: "clone", url: source.url, destinationDir: targetDir });
+      const { commit } = await this.cloneGit(source.url, stagingRoot);
+      options.onProgress?.({ phase: "vendor", destinationDir: targetDir });
+      await rm(path.join(stagingRoot, ".git"), { recursive: true, force: true });
+      options.onProgress?.({ phase: "verify", destinationDir: targetDir });
+      const contentDir = subdir ? path.join(stagingRoot, subdir) : stagingRoot;
+      if (!(await exists(path.join(contentDir, PACKAGE_MANIFEST_NAME)))) {
+        const where = subdir ? `${source.url} at ${subdir}` : source.url;
         throw new Error(
-          `${source.url} is not an kata package (no ${PACKAGE_MANIFEST_NAME} at its root).`,
+          `${where} is not an kata package (no ${PACKAGE_MANIFEST_NAME} at its root).`,
         );
       }
-      await writeVendoredSource(stagingDir, source.url, commit);
-      const pkg = await loadPackage(stagingDir, this.rootDir);
+      await writeVendoredSource(contentDir, source.url, commit, subdir);
+      const pkg = await loadPackage(contentDir, this.rootDir);
       return {
         // The staged dir is temporary; report the ref confirm() will write.
         package: { ...pkg, composeRef: makeLocalComposeRef(this.rootDir, targetDir) },
         source,
         composeRef: makeLocalComposeRef(this.rootDir, targetDir),
         targetDir,
-        stagingDir,
+        stagingRoot,
+        stagingContentDir: contentDir,
         vendoredCommit: commit ?? undefined,
       };
     } catch (err) {
-      await rm(stagingDir, { recursive: true, force: true });
+      await rm(stagingRoot, { recursive: true, force: true });
       throw err;
     }
   }
@@ -595,22 +599,25 @@ export class KataProject {
       );
     }
 
-    const stagingDir = await mkdtemp(path.join(os.tmpdir(), "kata-stage-"));
+    const stagingRoot = await mkdtemp(path.join(os.tmpdir(), "kata-stage-"));
     let staged: LoadedPackage;
+    let stagingContentDir: string;
     let commit: string | null;
     try {
-      ({ commit } = await this.cloneGit(vendored.url, stagingDir));
-      await rm(path.join(stagingDir, ".git"), { recursive: true, force: true });
-      if (!(await exists(path.join(stagingDir, PACKAGE_MANIFEST_NAME)))) {
+      ({ commit } = await this.cloneGit(vendored.url, stagingRoot));
+      await rm(path.join(stagingRoot, ".git"), { recursive: true, force: true });
+      stagingContentDir = vendored.subdir ? path.join(stagingRoot, vendored.subdir) : stagingRoot;
+      if (!(await exists(path.join(stagingContentDir, PACKAGE_MANIFEST_NAME)))) {
+        const where = vendored.subdir ? `${vendored.url} at ${vendored.subdir}` : vendored.url;
         throw new Error(
-          `${vendored.url} is not an kata package (no ${PACKAGE_MANIFEST_NAME} at its root).`,
+          `${where} is not an kata package (no ${PACKAGE_MANIFEST_NAME} at its root).`,
         );
       }
-      await writeVendoredSource(stagingDir, vendored.url, commit);
-      const loaded = await loadPackage(stagingDir, this.rootDir);
+      await writeVendoredSource(stagingContentDir, vendored.url, commit, vendored.subdir);
+      const loaded = await loadPackage(stagingContentDir, this.rootDir);
       staged = { ...loaded, composeRef: target.composeRef };
     } catch (err) {
-      await rm(stagingDir, { recursive: true, force: true });
+      await rm(stagingRoot, { recursive: true, force: true });
       throw err;
     }
 
@@ -634,8 +641,8 @@ export class KataProject {
         settle();
         await rm(target.dir, { recursive: true, force: true });
         await mkdir(path.dirname(target.dir), { recursive: true });
-        await cp(stagingDir, target.dir, { recursive: true });
-        await rm(stagingDir, { recursive: true, force: true });
+        await cp(stagingContentDir, target.dir, { recursive: true });
+        await rm(stagingRoot, { recursive: true, force: true });
         const apply = await applyPlan(plan);
         return {
           install: {
@@ -649,7 +656,7 @@ export class KataProject {
       },
       cancel: async (): Promise<void> => {
         settle();
-        await rm(stagingDir, { recursive: true, force: true });
+        await rm(stagingRoot, { recursive: true, force: true });
       },
     };
   }

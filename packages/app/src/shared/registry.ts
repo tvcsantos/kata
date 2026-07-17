@@ -33,7 +33,15 @@ export interface RegistryBundleContents {
 }
 
 export type RegistryBundleSource =
-  { kind: "git"; url: string; ref: string; commit: string } | { kind: "path"; path: string };
+  | {
+      kind: "git";
+      url: string;
+      ref: string;
+      commit: string;
+      /** Bundle directory inside the repo, for monorepos of bundles. */
+      subdir?: string;
+    }
+  | { kind: "path"; path: string };
 
 export interface RegistryBundle {
   name: string;

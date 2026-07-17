@@ -101,6 +101,16 @@ This shallow-clones into `.kata/packages/<name>/`, strips `.git`, and
 appends the path to `compose`. Commit the result; teammates need nothing but
 `kata apply`. Re-run with `--force` to update to the latest version.
 
+**From a monorepo of bundles** - one repo can host several bundles in
+subdirectories; select one with `#path:`:
+
+```sh
+kata install "https://github.com/acme/agent-bundles.git#path:bundles/backend"
+```
+
+Only that directory is vendored (named after it by default), and updates
+follow the same subdirectory.
+
 **From npm** - install with your package manager, then wire it up:
 
 ```sh

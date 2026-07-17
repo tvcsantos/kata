@@ -95,6 +95,23 @@ describe("parsePackageSource", () => {
     expect(slugFromGitUrl("https://github.com/acme/Agent-Standards.git")).toBe("agent-standards");
     expect(slugFromGitUrl("git@github.com:acme/pkg.git")).toBe("pkg");
   });
+
+  it("parses #path: monorepo subdirectories on git refs", () => {
+    expect(parsePackageSource("https://github.com/acme/bundles.git#path:packs/one")).toEqual({
+      kind: "git",
+      url: "https://github.com/acme/bundles.git",
+      subdir: "packs/one",
+    });
+    expect(parsePackageSource("git+https://github.com/acme/bundles.git#path:/packs/one/")).toEqual({
+      kind: "git",
+      url: "https://github.com/acme/bundles.git",
+      subdir: "packs/one",
+    });
+    expect(parsePackageSource("https://github.com/acme/pkg.git#path:")).toEqual({
+      kind: "git",
+      url: "https://github.com/acme/pkg.git",
+    });
+  });
 });
 
 describe("KataProject install/uninstall", () => {
@@ -187,6 +204,64 @@ describe("KataProject install/uninstall", () => {
     expect(await project.installedPackages()).toEqual([]);
 
     await expect(project.uninstall("team-standards")).rejects.toThrow(/No installed package/);
+  });
+
+  it("installs a bundle from a monorepo subdirectory and updates it", async () => {
+    const root = await makeTempDir("kata-engine-");
+    await scaffold(root, {
+      ".kata/config.yaml": "version: 1\ntargets:\n  fake-tool:\n    enabled: true\n",
+    });
+    const repoDir = await makePackageRepo({
+      "README.md": "monorepo of bundles - no manifest at the root\n",
+      "packs/one/kata-package.yaml": "name: pack-one\nversion: 1.0.0\n",
+      "packs/one/instructions/10-one.md": "Rules of one.\n",
+      "packs/two/kata-package.yaml": "name: pack-two\n",
+    });
+
+    const project = await openProject(root, { adapters: [fakeAdapter] });
+    const result = await project.install({
+      kind: "git",
+      url: `file://${repoDir}`,
+      subdir: "packs/one",
+    });
+
+    // Vendored under the subdir's name, only that bundle's content.
+    expect(result.package.manifest.name).toBe("pack-one");
+    expect(path.basename(result.package.dir)).toBe("one");
+    expect(await exists(path.join(result.package.dir, "instructions/10-one.md"))).toBe(true);
+    expect(await exists(path.join(result.package.dir, "packs"))).toBe(false);
+
+    const installed = await project.installedPackages();
+    expect(installed[0]?.source).toEqual({
+      kind: "git",
+      url: `file://${repoDir}`,
+      subdir: "packs/one",
+    });
+
+    // Upstream bumps only this bundle; update follows the recorded subdir.
+    await scaffold(repoDir, { "packs/one/instructions/10-one.md": "New rules of one.\n" });
+    const git = (args: string[]) =>
+      exec("git", ["-c", "user.email=t@example.com", "-c", "user.name=t", ...args], {
+        cwd: repoDir,
+      });
+    await git(["add", "-A"]);
+    await git(["-c", "commit.gpgsign=false", "commit", "-qm", "bump one"]);
+
+    const stagedUpdate = await project.stageUpdate("pack-one");
+    expect(String(stagedUpdate.plan.targets[0]!.files[0]!.newContent)).toContain(
+      "New rules of one.",
+    );
+    await stagedUpdate.confirm();
+    expect(await readFile(path.join(root, "FAKE.md"), "utf8")).toContain("New rules of one.");
+  });
+
+  it("rejects a subdir without a manifest, naming the subdir", async () => {
+    const root = await scaffoldProject();
+    const repoDir = await makePackageRepo({ "packs/one/kata-package.yaml": "name: pack-one\n" });
+    const project = await openProject(root);
+    await expect(
+      project.install({ kind: "git", url: `file://${repoDir}`, subdir: "packs/missing" }),
+    ).rejects.toThrow(/at packs\/missing is not an kata package/);
   });
 
   it("uninstalling a local path package keeps the directory", async () => {

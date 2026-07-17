@@ -173,6 +173,7 @@ Install a shared config package and add it to `compose`. See
 kata install https://github.com/acme/agent-standards.git   # vendored git
 kata install npm:@company/kata-standards               # from node_modules
 kata install ./shared/base-pkg                              # local folder
+kata install "https://github.com/acme/bundles.git#path:packs/backend"  # monorepo subdir
 ```
 
 | Option          | Description                                            |

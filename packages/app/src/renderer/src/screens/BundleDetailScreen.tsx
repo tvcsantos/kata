@@ -13,6 +13,9 @@ function provenance(bundle: RegistryBundle & { registryUrl?: string }): {
   if (bundle.registryUrl) rows.push({ label: "Registry", value: bundle.registryUrl });
   if (bundle.source.kind === "git") {
     rows.push({ label: "Source", value: bundle.source.url });
+    if (bundle.source.subdir) {
+      rows.push({ label: "Directory", value: bundle.source.subdir });
+    }
     rows.push({
       label: "Ref",
       value: `${bundle.source.ref} @ ${bundle.source.commit.slice(0, 7)}`,

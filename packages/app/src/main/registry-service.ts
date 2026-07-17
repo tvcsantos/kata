@@ -108,7 +108,9 @@ export class RegistryService {
    */
   resolveInstallSource(bundle: RegistryBundle): PackageSource {
     if (bundle.source.kind === "git") {
-      return { kind: "git", url: bundle.source.url };
+      return bundle.source.subdir
+        ? { kind: "git", url: bundle.source.url, subdir: bundle.source.subdir }
+        : { kind: "git", url: bundle.source.url };
     }
     if (this.sourceUrl.startsWith("file://")) {
       const registryRoot = path.dirname(path.dirname(fileURLToPath(this.sourceUrl)));
