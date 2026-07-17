@@ -1,6 +1,6 @@
 {
   "name": "@katahq/adapter-cursor",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "kata adapter for Cursor (.cursor/rules, .cursor/mcp.json)",
   "keywords": [
     "kata",
@@ -44,6 +44,6 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@katahq/core": "^0.1.1"
+    "@katahq/core": "^0.2.0"
   }
 }

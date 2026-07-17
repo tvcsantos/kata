@@ -1,7 +1,7 @@
 {
   "name": "@katahq/app",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "kata desktop app - discover and install agent-config bundles",
   "main": "out/main/index.js",
   "scripts": {
@@ -11,14 +11,14 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@katahq/adapter-claude-code": "^0.1.1",
-    "@katahq/adapter-codex": "^0.1.1",
-    "@katahq/adapter-copilot": "^0.1.1",
-    "@katahq/adapter-cursor": "^0.1.1",
-    "@katahq/adapter-gemini": "^0.1.1",
-    "@katahq/adapter-opencode": "^0.1.1",
-    "@katahq/adapter-vscode": "^0.1.1",
-    "@katahq/core": "^0.1.1",
+    "@katahq/adapter-claude-code": "^0.2.0",
+    "@katahq/adapter-codex": "^0.2.0",
+    "@katahq/adapter-copilot": "^0.2.0",
+    "@katahq/adapter-cursor": "^0.2.0",
+    "@katahq/adapter-gemini": "^0.2.0",
+    "@katahq/adapter-opencode": "^0.2.0",
+    "@katahq/adapter-vscode": "^0.2.0",
+    "@katahq/core": "^0.2.0",
     "react-markdown": "^10.1.0"
   },
   "devDependencies": {

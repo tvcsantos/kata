@@ -1,6 +1,6 @@
 {
   "name": "@katahq/adapter-opencode",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "kata adapter for OpenCode (AGENTS.md, opencode.json, .opencode/*)",
   "keywords": [
     "kata",
@@ -44,7 +44,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@katahq/core": "^0.1.1",
+    "@katahq/core": "^0.2.0",
     "yaml": "^2.5.0"
   }
 }

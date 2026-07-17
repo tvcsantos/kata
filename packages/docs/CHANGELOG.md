@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- Next Version Placeholder -->
 
+## [0.2.0](https://github.com/tvcsantos/kata/compare/@katahq/docs@0.1.1...@katahq/docs@0.2.0) - 2026-07-17
+
+### ✨ Features
+
+- Implement desktop app ([ea7d6bb](https://github.com/tvcsantos/kata/commit/ea7d6bbe3f0b887385fe0966d5da6e2e88b879dc))
+
+### 📝 Documentation
+
+- Add llms and mermaid viewer ([0119504](https://github.com/tvcsantos/kata/commit/0119504f8c1564aeb53966b84fe823ed6b3d2716))
+- Add missing icons ([071a0ec](https://github.com/tvcsantos/kata/commit/071a0ece0b836da1d890fa24c3f472dba12e7df0))
+- Add missing icons ([52a3340](https://github.com/tvcsantos/kata/commit/52a33400fce522c75daf9066038f9cc44703a381))
+- Improve documentation ([1e6d14f](https://github.com/tvcsantos/kata/commit/1e6d14f5c5d66ae6df03d5fc4b59326352a6e3c4))
+- Sync colors with logo ([816117d](https://github.com/tvcsantos/kata/commit/816117dfe5cfa74e5a14d103ae409c513ed667e2))
+
 ## [0.1.1](https://github.com/tvcsantos/kata/compare/v0.1.0...@katahq/docs@0.1.1) - 2026-07-13
 
 ### 📝 Documentation
