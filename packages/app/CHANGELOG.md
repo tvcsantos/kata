@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- Next Version Placeholder -->
 
+## [0.5.0](https://github.com/tvcsantos/kata/compare/@katahq/app@0.4.0...@katahq/app@0.5.0) - 2026-07-17
+
+### ✨ Features
+
+- Update default registry URL ([d511e02](https://github.com/tvcsantos/kata/commit/d511e0271372438d9371cc8bfbfa3644c0fa0b24))
+
 ## [0.3.0](https://github.com/tvcsantos/kata/compare/@katahq/app@0.2.0...@katahq/app@0.3.0) - 2026-07-17
 
 ### ✨ Features

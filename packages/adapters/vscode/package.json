@@ -1,6 +1,6 @@
 {
   "name": "@katahq/adapter-vscode",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "kata adapter for VS Code (.vscode/mcp.json, .github/copilot-instructions.md, .github/prompts)",
   "keywords": [
     "kata",
@@ -44,6 +44,6 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@katahq/core": "^0.4.0"
+    "@katahq/core": "^0.5.0"
   }
 }
