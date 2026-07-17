@@ -75,13 +75,15 @@ kata plan
 kata plan --target claude-code   # only these targets
 kata plan --no-diff              # actions only, no diffs
 kata plan --check                # CI gate: exit 1 when changes exist
+kata plan --json                 # machine-readable plan with structured diffs
 ```
 
-| Option                 | Description                                               |
-| ---------------------- | --------------------------------------------------------- |
-| `-t, --target <id...>` | Only plan the listed targets                              |
-| `--no-diff`            | Hide content diffs                                        |
-| `--check`              | Exit 1 when changes exist (like `status`, but with diffs) |
+| Option                 | Description                                                                                   |
+| ---------------------- | --------------------------------------------------------------------------------------------- |
+| `-t, --target <id...>` | Only plan the listed targets                                                                  |
+| `--no-diff`            | Hide content diffs                                                                            |
+| `--check`              | Exit 1 when changes exist (like `status`, but with diffs)                                     |
+| `--json`               | Print the plan as JSON: per-file actions, diff hunks, and a `managedRegionOnly` flag per file |
 
 Actions shown per file: `+ create`, `~ update`, or `ok` (unchanged). Adapter
 warnings (e.g. skipped artifacts) are listed with a leading `!`.
@@ -170,12 +172,32 @@ Install a shared config package and add it to `compose`. See
 ```sh
 kata install https://github.com/acme/agent-standards.git   # vendored git
 kata install npm:@company/kata-standards               # from node_modules
+kata install ./shared/base-pkg                              # local folder
 ```
 
 | Option          | Description                                            |
 | --------------- | ------------------------------------------------------ |
 | `--name <slug>` | Directory name for git installs (default: repo name)   |
 | `--force`       | Replace an already-installed package (git update path) |
+| `--json`        | Print the install result as JSON                       |
+
+Git installs record their provenance (source URL and pinned commit) in a
+`.kata-source.yaml` next to the vendored content, so update checks can
+compare the vendored commit against the source later.
+
+## `kata uninstall`
+
+Remove an installed package by its manifest name: the compose entry is
+deleted, and packages vendored under `.kata/packages/` are removed from
+disk (local-path and npm packages are only unwired).
+
+```sh
+kata uninstall team-standards
+```
+
+| Option   | Description                        |
+| -------- | ---------------------------------- |
+| `--json` | Print the uninstall result as JSON |
 
 ## `kata watch`
 

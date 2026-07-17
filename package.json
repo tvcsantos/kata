@@ -9,7 +9,8 @@
     "packages/core",
     "packages/adapters/*",
     "packages/cli",
-    "packages/docs"
+    "packages/docs",
+    "packages/app"
   ],
   "scripts": {
     "build": "npm run build --workspaces --if-present",
@@ -38,6 +39,7 @@
   },
   "allowScripts": {
     "fsevents@2.3.3": true,
-    "esbuild": true
+    "esbuild": true,
+    "electron": true
   }
 }

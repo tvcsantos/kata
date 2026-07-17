@@ -13,10 +13,7 @@ type PackageManifest = {
 // module (src or dist), so reading it at runtime keeps the
 // reported version from drifting from the released one.
 const manifest = JSON.parse(
-  readFileSync(
-    join(dirname(fileURLToPath(import.meta.url)), "../package.json"),
-    "utf-8",
-  ),
+  readFileSync(join(dirname(fileURLToPath(import.meta.url)), "../package.json"), "utf-8"),
 ) as PackageManifest;
 
 function resolveAuthors(): string[] {

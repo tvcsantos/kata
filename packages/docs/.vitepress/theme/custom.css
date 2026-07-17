@@ -25,3 +25,19 @@
   --vp-c-brand-3: #b3413f;
   --vp-c-brand-soft: rgba(217, 122, 116, 0.16);
 }
+
+/* App screenshots: framed, and swapped with the site theme. */
+.app-shot {
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  margin: 1rem 0;
+}
+
+html:not(.dark) .dark-only {
+  display: none;
+}
+
+.dark .light-only {
+  display: none;
+}

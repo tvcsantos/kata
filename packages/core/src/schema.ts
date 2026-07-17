@@ -26,13 +26,57 @@ export const configSchema = z.object({
   compose: z.array(z.string()).default([]),
 });
 
-/** Manifest file every shareable package must carry: `kata-package.yaml`. */
+/** Lowercase kebab-case, the format for registry names, personas, and tags. */
+const slugSchema = z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, "must be lowercase kebab-case");
+
+const envVarNameSchema = z
+  .string()
+  .regex(/^[A-Za-z_][A-Za-z0-9_]*$/, "must be a valid env var name");
+
+export const packageAuthorSchema = z.object({
+  name: z.string().min(1),
+  url: z.url().optional(),
+});
+
+/**
+ * Requirements surfaced to users before install. `env` is derivable by
+ * scanning `${env:VAR}` references in `mcp/servers.yaml`; the explicit
+ * field lets authors document vars kata cannot see.
+ */
+export const packageRequiresSchema = z.object({
+  env: z.array(envVarNameSchema).default([]),
+  /** Binaries the package's MCP servers execute (e.g. "npx"). */
+  tools: z.array(z.string().min(1)).default([]),
+});
+
+/**
+ * Manifest file every shareable package must carry: `kata-package.yaml`.
+ * Only `name` is required; the discovery fields exist so registries and
+ * marketplace UIs can present the package - packages without them still
+ * install fine.
+ */
 export const packageManifestSchema = z.object({
   name: z.string().min(1),
   version: z.string().optional(),
   description: z.string().optional(),
+  /** Persona slugs this package is curated for (open set; see registry). */
+  personas: z.array(slugSchema).optional(),
+  tags: z.array(slugSchema).optional(),
+  /**
+   * Harnesses this package is intended for (informational - kata compiles
+   * for whatever the project enables); used for marketplace filtering.
+   */
+  targets: z.array(z.string().min(1)).optional(),
+  homepage: z.url().optional(),
+  license: z.string().min(1).optional(),
+  /** Path to a square icon (<= 128px), relative to the package root. */
+  icon: z.string().min(1).optional(),
+  authors: z.array(packageAuthorSchema).optional(),
+  requires: packageRequiresSchema.optional(),
 });
 
+export type PackageAuthor = z.infer<typeof packageAuthorSchema>;
+export type PackageRequires = z.infer<typeof packageRequiresSchema>;
 export type PackageManifest = z.infer<typeof packageManifestSchema>;
 
 export type TargetConfig = z.infer<typeof targetConfigSchema>;

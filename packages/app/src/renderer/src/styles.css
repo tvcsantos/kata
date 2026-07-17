@@ -1,0 +1,1301 @@
+/* ── Design tokens ─────────────────────────────────────────────────
+   Warm neutrals around the kata brand red; every color has a light and
+   dark value so the whole app follows the OS theme. */
+:root {
+  color-scheme: light dark;
+  --bg: #faf9f7;
+  --surface: #ffffff;
+  --surface-2: #f4f2ef;
+  --fg: #1c1917;
+  --muted: #67605a;
+  --border: #e8e5e1;
+  --border-strong: #d6d2cc;
+  --accent: #a83f36;
+  --accent-hover: #92362e;
+  --accent-fg: #ffffff;
+  --accent-tint: #f8e9e6;
+  --accent-tint-fg: #8c342d;
+  --ok: #1a9b52;
+  --warn: #b45309;
+  --danger: #dc2626;
+  --notice-bg: #fdf6ec;
+  --notice-border: #f0dcc0;
+  --shadow-1: 0 1px 2px rgba(28, 25, 23, 0.06);
+  --shadow-2: 0 4px 12px rgba(28, 25, 23, 0.08);
+  --shadow-3: 0 16px 48px rgba(28, 25, 23, 0.18);
+  --ring: 0 0 0 3px rgba(181, 69, 60, 0.25);
+  --radius-s: 8px;
+  --radius-m: 12px;
+  --radius-l: 16px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #141415;
+    --surface: #1d1d1f;
+    --surface-2: #26262a;
+    --fg: #e9e9ec;
+    --muted: #a3a3aa;
+    --border: #2c2c30;
+    --border-strong: #414148;
+    --accent: #b84c3f;
+    --accent-hover: #c65a4d;
+    --accent-fg: #ffffff;
+    --accent-tint: #35272b;
+    --accent-tint-fg: #e5988d;
+    --ok: #34c274;
+    --warn: #e0a04f;
+    --danger: #f36c6c;
+    --notice-bg: #26241d;
+    --notice-border: #45402f;
+    --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-2: 0 4px 12px rgba(0, 0, 0, 0.45);
+    --shadow-3: 0 16px 48px rgba(0, 0, 0, 0.6);
+    --ring: 0 0 0 3px rgba(217, 106, 93, 0.35);
+  }
+}
+
+/* ── Base ──────────────────────────────────────────────────────── */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  margin: 0;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.55;
+  background: var(--bg);
+  color: var(--fg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow: var(--ring);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Slim, quiet scrollbars everywhere. */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 999px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+
+/* ── App shell: fixed window, screens scroll internally ────────── */
+
+main {
+  max-width: 880px;
+  height: 100vh;
+  margin: 0 auto;
+  padding: 1.5rem 1.5rem 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.content > section {
+  height: 100%;
+  min-height: 0;
+  overflow-y: auto;
+  padding-bottom: 1.5rem;
+  scrollbar-gutter: stable;
+}
+
+.content > section.browse,
+.content > section.detail,
+.content > section.about,
+.content > section.onboarding {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.browse .card-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0.25rem 1rem 1.5rem 0.25rem;
+  margin: -0.25rem;
+  scrollbar-gutter: stable;
+}
+
+.detail .back {
+  align-self: flex-start;
+}
+
+.detail-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  margin-top: 0.75rem;
+  border-top: 1px solid var(--border);
+  padding-bottom: 1.5rem;
+  padding-right: 1rem;
+  scrollbar-gutter: stable;
+}
+
+.detail-scroll > h2:first-child {
+  margin-top: 1.25rem;
+}
+
+/* ── Typography ────────────────────────────────────────────────── */
+
+h1 {
+  font-size: 1.7rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin: 2rem 0 0.75rem;
+}
+
+h3 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 1.25rem 0 0.5rem;
+}
+
+.hero {
+  text-align: center;
+  padding: 2.5rem 0 2rem;
+}
+
+.hero h1 {
+  font-size: 2.3rem;
+  margin: 0 0 0.5rem;
+}
+
+.hero p {
+  color: var(--muted);
+  margin: 0 0 1.5rem;
+}
+
+.empty {
+  color: var(--muted);
+}
+
+/* ── Buttons ───────────────────────────────────────────────────── */
+
+button {
+  font: inherit;
+  font-weight: 500;
+  color: var(--fg);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-s);
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  box-shadow: var(--shadow-1);
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.1s ease;
+}
+
+button:hover:not(:disabled) {
+  border-color: var(--border-strong);
+  background: var(--surface-2);
+}
+
+button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+button:disabled {
+  opacity: 0.55;
+  cursor: default;
+  box-shadow: none;
+}
+
+button.primary:disabled {
+  opacity: 1;
+  background: var(--surface-2);
+  color: var(--muted);
+  border-color: var(--border);
+}
+
+button.primary {
+  background: var(--accent);
+  color: var(--accent-fg);
+  border-color: transparent;
+  font-weight: 600;
+  padding: 0.6rem 1.4rem;
+}
+
+button.primary:hover:not(:disabled) {
+  background: var(--accent-hover);
+  border-color: transparent;
+}
+
+button.back {
+  margin-bottom: 1.5rem;
+  color: var(--muted);
+}
+
+button.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  padding: 0;
+  flex-shrink: 0;
+  color: var(--muted);
+}
+
+button.icon-button:hover:not(:disabled) {
+  color: var(--danger);
+  border-color: var(--danger);
+  background: var(--surface);
+}
+
+button.icon-button.add:hover:not(:disabled) {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* ── Inputs ────────────────────────────────────────────────────── */
+
+input[type="search"],
+input[type="text"] {
+  font: inherit;
+  color: var(--fg);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-s);
+  padding: 0.55rem 0.9rem;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+input[type="search"]::placeholder,
+input[type="text"]::placeholder {
+  color: var(--muted);
+}
+
+input[type="search"]:focus,
+input[type="text"]:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: var(--ring);
+}
+
+input[type="checkbox"] {
+  accent-color: var(--accent);
+  width: 1rem;
+  height: 1rem;
+}
+
+/* ── Header row (shared across screens) ────────────────────────── */
+
+.screen-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 2.6rem;
+  margin-bottom: 1.25rem;
+}
+
+.screen-head h1 {
+  margin: 0;
+  font-size: 1.55rem;
+}
+
+.screen-head-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.screen-head button {
+  font-size: 0.85rem;
+  padding: 0.4rem 0.85rem;
+  color: var(--muted);
+  box-shadow: none;
+}
+
+.screen-head .back {
+  margin-bottom: 0;
+}
+
+.screen-head button.primary {
+  padding: 0.4rem 1rem;
+  color: var(--accent-fg);
+  box-shadow: var(--shadow-1);
+}
+
+/* ── Filters row ───────────────────────────────────────────────── */
+
+.filters {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.filters input[type="search"] {
+  flex: 1;
+}
+
+.filters .toggle {
+  display: flex;
+  gap: 0.45rem;
+  align-items: center;
+  color: var(--muted);
+  font-size: 0.88rem;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* ── Chips ─────────────────────────────────────────────────────── */
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.chip {
+  background: var(--surface-2);
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 0.22rem 0.7rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.chip.enabled {
+  background: var(--surface-2);
+  border-color: var(--border-strong);
+  color: var(--fg);
+}
+
+button.chip.selectable {
+  cursor: pointer;
+  box-shadow: none;
+}
+
+button.chip.selectable:hover {
+  border-color: var(--accent);
+  background: var(--surface-2);
+}
+
+button.chip.selectable.active {
+  background: var(--surface-2);
+  color: var(--fg);
+  border-color: var(--border-strong);
+}
+
+button.chip.selectable.active:hover {
+  border-color: var(--accent);
+}
+
+/* One fixed-height row: no layout shift when empty, no wrapping when full. */
+.active-personas {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 0.45rem;
+  overflow: hidden;
+  min-height: 2.1rem;
+  margin-bottom: 0.75rem;
+}
+
+.active-personas .chip {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.active-personas .empty {
+  font-size: 0.85rem;
+}
+
+/* ── Dropdown (personas filter) ────────────────────────────────── */
+
+.dropdown {
+  position: relative;
+}
+
+.dropdown summary {
+  list-style: none;
+  cursor: pointer;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-s);
+  padding: 0.55rem 1rem;
+  font-weight: 500;
+  white-space: nowrap;
+  user-select: none;
+  box-shadow: var(--shadow-1);
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+
+.dropdown summary:hover {
+  border-color: var(--border-strong);
+  background: var(--surface-2);
+}
+
+.dropdown summary::-webkit-details-marker {
+  display: none;
+}
+
+.dropdown summary::after {
+  content: " ▾";
+  color: var(--muted);
+}
+
+.dropdown[open] summary {
+  border-color: var(--accent);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 10;
+  min-width: 240px;
+  max-height: 320px;
+  overflow-y: auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-m);
+  padding: 0.5rem;
+  box-shadow: var(--shadow-3);
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  animation: pop-in 0.14s ease-out;
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.dropdown-search {
+  font-size: 0.85rem;
+  padding: 0.4rem 0.7rem;
+  margin-bottom: 0.3rem;
+}
+
+.dropdown-bulk {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 0.4rem;
+}
+
+.dropdown-bulk button {
+  flex: 1;
+  font-size: 0.76rem;
+  padding: 0.28rem 0.5rem;
+  color: var(--muted);
+  box-shadow: none;
+}
+
+.dropdown-menu .empty {
+  font-size: 0.85rem;
+  padding: 0.25rem 0.5rem;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.4rem 0.55rem;
+  border-radius: var(--radius-s);
+  font-size: 0.9rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.12s ease;
+}
+
+.dropdown-item:hover {
+  background: var(--surface-2);
+}
+
+/* ── Bundle cards ──────────────────────────────────────────────── */
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(245px, 1fr));
+  gap: 0.9rem;
+}
+
+button.card {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.55rem;
+  text-align: left;
+  padding: 1.1rem;
+  background: var(--surface);
+  border-radius: var(--radius-m);
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+button.card:hover:not(:disabled) {
+  border-color: var(--border-strong);
+  background: var(--surface);
+  box-shadow: var(--shadow-2);
+  transform: translateY(-2px);
+}
+
+button.card:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+button.card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+  line-height: 1.45;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-head {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-width: 0;
+}
+
+.card-head h1 {
+  margin: 0;
+}
+
+.card-head .name {
+  font-weight: 650;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.card-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-s);
+  flex-shrink: 0;
+}
+
+.card-icon.placeholder {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.reason {
+  color: var(--muted);
+  font-size: 0.76rem;
+  font-weight: 500;
+  font-style: italic;
+}
+
+/* ── Badges ────────────────────────────────────────────────────── */
+
+.verified-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 50%;
+  background: var(--ok);
+  color: white;
+  font-size: 0.68rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  border-radius: 999px;
+  padding: 0.15rem 0.55rem;
+}
+
+.badge.featured {
+  background: var(--surface-2);
+  border: 1px solid var(--border-strong);
+  color: var(--fg);
+}
+
+.badge.managed {
+  background: var(--surface-2);
+  border: 1px solid var(--border-strong);
+  color: var(--muted);
+  font-weight: 500;
+}
+
+/* ── Notices ───────────────────────────────────────────────────── */
+
+.notice {
+  background: var(--notice-bg);
+  border: 1px solid var(--notice-border);
+  border-radius: var(--radius-m);
+  padding: 0.9rem 1.1rem;
+  margin: 1rem 0;
+}
+
+.notice p {
+  margin: 0 0 0.75rem;
+  overflow-wrap: anywhere;
+}
+
+.notice p:last-child {
+  margin-bottom: 0;
+}
+
+.warning {
+  color: var(--warn);
+  font-size: 0.85rem;
+}
+
+/* ── Tables ────────────────────────────────────────────────────── */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 0.55rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+th {
+  color: var(--muted);
+  font-weight: 500;
+  font-size: 0.82rem;
+}
+
+td.source,
+td.commit {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.78rem;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+/* ── List rows (recents, registries) ───────────────────────────── */
+
+.recents {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Row buttons only - never the compact icon buttons sitting in rows. */
+.recents button:not(.icon-button) {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  text-align: left;
+  padding: 0.8rem 1.1rem;
+  border-radius: var(--radius-m);
+}
+
+.recents .name {
+  font-weight: 600;
+}
+
+.recents .dir,
+p.dir {
+  color: var(--muted);
+  font-size: 0.84rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.registry-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-m);
+  padding: 0.7rem 1.1rem;
+  box-shadow: var(--shadow-1);
+}
+
+.registry-info {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.registry-info .name {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.1rem;
+}
+
+.registry-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+  font-size: 0.85rem;
+}
+
+.registry-row.suggested .chip {
+  font-size: 0.68rem;
+  padding: 0.08rem 0.5rem;
+  line-height: 1.3;
+}
+
+.registry-add {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.registry-add input {
+  flex: 1;
+}
+
+.registry-add input.registry-name {
+  flex: 0 0 180px;
+}
+
+/* ── Markdown (bundle README) ──────────────────────────────────── */
+
+.markdown {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-m);
+  padding: 0.5rem 1.4rem;
+  overflow-wrap: anywhere;
+}
+
+.markdown pre {
+  background: var(--surface-2);
+  padding: 0.85rem;
+  border-radius: var(--radius-s);
+  overflow-x: auto;
+}
+
+.markdown code {
+  background: var(--surface-2);
+  border-radius: 5px;
+  padding: 0.1rem 0.35rem;
+  font-size: 0.88em;
+}
+
+.markdown pre code {
+  padding: 0;
+  background: none;
+}
+
+.markdown img {
+  max-width: 100%;
+}
+
+.markdown a {
+  color: var(--accent);
+}
+
+/* ── Modal (install flow) ──────────────────────────────────────── */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 12, 10, 0.45);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  animation: fade-in 0.15s ease-out;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-l);
+  padding: 1.5rem;
+  max-width: 720px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-3);
+  animation: modal-in 0.2s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+}
+
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.modal h2 {
+  text-transform: none;
+  letter-spacing: -0.01em;
+  font-size: 1.25rem;
+  color: var(--fg);
+  margin-top: 0;
+}
+
+/* The modal body scrolls (long diffs); the actions stay pinned in view. */
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  position: sticky;
+  bottom: -1.5rem;
+  margin: 1.5rem -1.5rem -1.5rem;
+  padding: 0.9rem 1.5rem;
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+}
+
+/* ── Diff preview ──────────────────────────────────────────────── */
+
+.diff-file {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-s);
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.diff-file summary {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  user-select: none;
+}
+
+.diff-action {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.diff-action.create {
+  color: var(--ok);
+}
+
+.diff-action.update {
+  color: var(--warn);
+}
+
+pre.diff {
+  background: var(--surface-2);
+  border-radius: var(--radius-s);
+  padding: 0.75rem;
+  overflow-x: auto;
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+pre.diff .hunk-header {
+  color: var(--muted);
+}
+
+pre.diff .line-add {
+  color: var(--ok);
+}
+
+pre.diff .line-del {
+  color: var(--danger);
+}
+
+/* ── First-run: onboarding & welcome ───────────────────────────── */
+
+.onboarding .card-grid {
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  flex: 1;
+  min-height: 0;
+  /* Center when everything fits; fall back to top when it overflows so
+     the first row stays reachable by scrolling. */
+  align-content: safe center;
+  overflow-y: auto;
+  padding: 0.25rem 1rem 0.25rem 0.25rem;
+  scrollbar-gutter: stable;
+}
+
+.onboarding button.card {
+  padding: 0.85rem 1rem;
+  gap: 0.3rem;
+}
+
+.onboarding button.card p {
+  font-size: 0.82rem;
+}
+
+/* Selection must survive hover - the generic hover rules are more
+   specific, so restate the selected look for the hovered state too. */
+button.card.selected,
+button.card.selected:hover:not(:disabled) {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+
+button.card.selected:hover:not(:disabled) {
+  box-shadow:
+    0 0 0 1px var(--accent),
+    var(--shadow-2);
+}
+
+.onboarding .modal-actions {
+  position: static;
+  justify-content: center;
+  margin: 1rem 0 0;
+  padding: 0.9rem 0 1.25rem;
+  border-top: none;
+  background: none;
+}
+
+.welcome .hero {
+  padding-bottom: 0.5rem;
+}
+
+.welcome-logo {
+  width: 68px;
+  height: 68px;
+  margin-bottom: 0.75rem;
+  filter: drop-shadow(0 3px 10px rgba(28, 25, 23, 0.18));
+}
+
+.welcome-question {
+  font-size: 1.05rem;
+  font-weight: 650;
+  text-transform: none;
+  letter-spacing: normal;
+  color: var(--fg);
+  margin: 1.75rem 0 0.25rem;
+}
+
+.welcome-hint {
+  font-size: 0.9rem;
+  margin-bottom: 0;
+}
+
+/* First-run registry setup: centered column between hero and actions. */
+.setup-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  width: 100%;
+  max-width: 620px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+/* ── About ─────────────────────────────────────────────────────── */
+
+.about .back {
+  align-self: flex-start;
+  margin-bottom: 0.5rem;
+}
+
+.about-body {
+  flex: 1;
+  min-height: 0;
+  max-width: 460px;
+  margin: 0 auto;
+  /* Keep the centered block clear of the window edges. */
+  padding: 1rem 0 3rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.about-logo {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto;
+  filter: drop-shadow(0 3px 10px rgba(28, 25, 23, 0.18));
+}
+
+.about-body h1 {
+  margin: 0.5rem 0 0.4rem;
+}
+
+.about-body h2 {
+  margin: 0.9rem 0 0.35rem;
+}
+
+.about-summary {
+  color: var(--muted);
+  text-align: left;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.about-versions {
+  max-width: 280px;
+  margin: 0 auto;
+  font-size: 0.88rem;
+}
+
+.about-versions th,
+.about-versions td {
+  padding: 0.3rem 0.6rem;
+}
+
+.about-versions th {
+  text-align: left;
+}
+
+.about-versions td {
+  text-align: right;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.85rem;
+}
+
+.about-license {
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.about a,
+a {
+  color: var(--accent);
+}
+
+/* Icon-sized link styled like an icon button (e.g. docs, top right). */
+a.icon-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  flex-shrink: 0;
+  color: var(--muted);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-s);
+  box-shadow: var(--shadow-1);
+  transition:
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+a.icon-link:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* Segmented control (theme picker). */
+.segmented {
+  display: inline-flex;
+  margin: 0 auto;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-s);
+  padding: 3px;
+  gap: 2px;
+}
+
+.segmented button {
+  border: none;
+  background: none;
+  box-shadow: none;
+  font-size: 0.85rem;
+  padding: 0.35rem 1rem;
+  color: var(--muted);
+  border-radius: 6px;
+}
+
+.segmented button.active {
+  background: var(--surface);
+  color: var(--fg);
+  box-shadow: var(--shadow-1);
+}
+
+/* ── Launch splash ─────────────────────────────────────────────── */
+
+.splash {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  cursor: pointer;
+  animation: splash-out 0.45s ease-in 1.7s forwards;
+}
+
+.splash-logo {
+  width: 128px;
+  height: 128px;
+  filter: drop-shadow(0 10px 28px rgba(28, 25, 23, 0.25));
+  animation: splash-logo-in 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.splash-name {
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  animation: splash-name-in 0.5s ease-out 0.45s both;
+}
+
+@keyframes splash-logo-in {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes splash-name-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes splash-out {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+/* Screens fade in after the splash. */
+.screen-in {
+  animation: screen-in 0.35s ease-out both;
+}
+
+@keyframes screen-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ── Dark-mode color accents ───────────────────────────────────────
+   The neutral dark base stays; brand color returns as small touches
+   and a faint atmospheric glow, never as large surfaces. */
+@media (prefers-color-scheme: dark) {
+  body {
+    background:
+      radial-gradient(900px 480px at 50% -12%, rgba(198, 86, 72, 0.08), transparent 70%), var(--bg);
+  }
+
+  /* Tinted surfaces keep neutral text - red text reads poorly on dark. */
+  .chip.enabled,
+  button.chip.selectable.active {
+    background: var(--accent-tint);
+    color: var(--fg);
+    border-color: transparent;
+  }
+
+  button.card:hover:not(:disabled) {
+    border-color: var(--accent);
+  }
+}

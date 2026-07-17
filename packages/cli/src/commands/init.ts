@@ -1,5 +1,4 @@
 import { mkdir, writeFile } from "node:fs/promises";
-import os from "node:os";
 import pc from "picocolors";
 import {
   CONFIG_SCHEMA_VERSION,
@@ -12,38 +11,13 @@ import {
   makeInstructionsDirPath,
   makeMcpDirPath,
   makeMcpServerPath,
-  type Adapter,
+  makeStandaloneContext,
 } from "@katahq/core";
 import { Flags } from "@oclif/core";
 import { buildRegistry } from "../context.js";
 import { SAMPLE_GLOBAL_INSTRUCTIONS, SAMPLE_INSTRUCTIONS, SAMPLE_SERVERS } from "../templates.js";
 import { KATA_PLAN_HINT } from "../hints.js";
 import { KataCommand } from "../kata-command.js";
-
-async function detectStandalone(
-  adapter: Adapter,
-  rootDir: string,
-  scope: "project" | "global",
-): Promise<boolean> {
-  return adapter.detect({
-    project: {
-      rootDir,
-      configDir: makeConfigDirPath(rootDir),
-      config: { version: CONFIG_SCHEMA_VERSION, targets: {}, compose: [] },
-      packages: [],
-      scope,
-      instructions: [],
-      mcpServers: {},
-      prompts: [],
-      agents: [],
-      skills: [],
-    },
-    projectRoot: rootDir,
-    homeDir: os.homedir(),
-    scope,
-    targetOptions: {},
-  });
-}
 
 export async function runInit(opts: { global?: boolean } = {}): Promise<void> {
   const global = opts.global ?? false;
@@ -60,7 +34,7 @@ export async function runInit(opts: { global?: boolean } = {}): Promise<void> {
   const registry = await buildRegistry();
   const targetLines: string[] = [];
   for (const adapter of registry.all()) {
-    const detected = await detectStandalone(adapter, rootDir, scope);
+    const detected = await adapter.detect(makeStandaloneContext(rootDir, scope));
     targetLines.push(
       `  ${adapter.id}:`,
       `    enabled: ${detected}${detected ? "" : "  # not detected on this machine"}`,

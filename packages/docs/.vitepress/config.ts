@@ -31,6 +31,7 @@ export default withMermaid({
             { text: "Kata format", link: "/guide/kata-format" },
             { text: "Managed files", link: "/guide/managed-files" },
             { text: "Sharing & packages", link: "/guide/sharing" },
+            { text: "Desktop app", link: "/guide/app" },
           ],
         },
       ],

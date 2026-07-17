@@ -29,4 +29,12 @@ features:
   - icon: 🔐
     title: No inlined secrets
     details: Reference secrets as ${env:VAR} in your .kata/ files. Adapters render each tool's native env expansion - keys never land in committed files.
+  - icon: 🖥️
+    title: Desktop app
+    details: Browse curated bundle registries, inspect exactly what each bundle adds, and install with a full diff preview - no CLI required.
+    link: /guide/app
+  - icon: 📦
+    title: Shareable bundles
+    details: Package instructions, MCP servers, prompts, agents, and skills once - teammates install them from git, npm, or a registry.
+    link: /guide/sharing
 ---

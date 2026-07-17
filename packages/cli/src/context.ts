@@ -9,8 +9,10 @@ import {
   displayAbsolutePath,
   findProjectRoot,
   loadProject,
+  makeAdapterContext,
   makeConfigPathFromRoot,
   makeNodeModulesDirPath,
+  selectEnabledAdapters,
   type Adapter,
   type AdapterContext,
   type Project,
@@ -174,24 +176,9 @@ export function enabledAdapters(
   registry: AdapterRegistry,
   only?: string[],
 ): EnabledTargets {
-  const adapters: Adapter[] = [];
-  const unknown: string[] = [];
-  for (const [id, target] of Object.entries(project.config.targets)) {
-    if (!target.enabled) continue;
-    if (only && only.length > 0 && !only.includes(id)) continue;
-    const adapter = registry.get(id);
-    if (adapter) adapters.push(adapter);
-    else unknown.push(id);
-  }
-  return { adapters, unknown };
+  return selectEnabledAdapters(project, registry.all(), only);
 }
 
 export function makeContext(project: Project, adapter: Adapter): AdapterContext {
-  return {
-    project,
-    projectRoot: project.rootDir,
-    homeDir: os.homedir(),
-    scope: project.scope,
-    targetOptions: project.config.targets[adapter.id]?.options ?? {},
-  };
+  return makeAdapterContext(project, adapter);
 }

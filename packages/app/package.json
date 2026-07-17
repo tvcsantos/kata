@@ -1,0 +1,34 @@
+{
+  "name": "@katahq/app",
+  "private": true,
+  "version": "0.1.0",
+  "description": "kata desktop app - discover and install agent-config bundles",
+  "main": "out/main/index.js",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "start": "electron-vite preview",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@katahq/adapter-claude-code": "^0.1.1",
+    "@katahq/adapter-codex": "^0.1.1",
+    "@katahq/adapter-copilot": "^0.1.1",
+    "@katahq/adapter-cursor": "^0.1.1",
+    "@katahq/adapter-gemini": "^0.1.1",
+    "@katahq/adapter-opencode": "^0.1.1",
+    "@katahq/adapter-vscode": "^0.1.1",
+    "@katahq/core": "^0.1.1",
+    "react-markdown": "^10.1.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "electron": "^43.0.0",
+    "electron-vite": "^5.0.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "vite": "^7.0.0"
+  }
+}

@@ -15,6 +15,7 @@ import { InitCommand } from "./commands/init.js";
 import { InstallCommand } from "./commands/install.js";
 import { PlanCommand } from "./commands/plan.js";
 import { StatusCommand } from "./commands/status.js";
+import { UninstallCommand } from "./commands/uninstall.js";
 import {
   TargetsDisableCommand,
   TargetsEnableCommand,
@@ -33,6 +34,7 @@ export const COMMANDS: Record<string, Command.Class> = {
   "add:skill": AddSkillCommand,
   import: ImportCommand,
   install: InstallCommand,
+  uninstall: UninstallCommand,
   watch: WatchCommand,
   status: StatusCommand,
   doctor: DoctorCommand,

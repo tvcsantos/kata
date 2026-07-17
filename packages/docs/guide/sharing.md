@@ -20,6 +20,50 @@ version: 2.0.0 # optional
 description: Our shared agent rules
 ```
 
+### Discovery metadata
+
+Optional fields let registries and marketplace UIs present a package -
+packages without them still install fine, they just present poorly:
+
+```yaml
+name: backend-essentials # required; registries need lowercase kebab-case
+version: 1.4.0 # semver recommended
+description: >- # one-liner, <= 140 chars, shown on cards
+  Test-first instructions, PR conventions, and MCP servers
+  for backend services.
+
+personas: # persona slugs this package is curated for
+  - backend
+  - devops
+tags: # freeform, lowercase kebab-case
+  - testing
+  - code-review
+targets: # harnesses this package is intended for; informational
+  - claude-code # (kata compiles for whatever the project enables),
+  - cursor # used for marketplace filtering
+homepage: https://github.com/acme/agent-standards
+license: MIT
+icon: ./icon.png # square, <= 128px, relative to the package root
+authors:
+  - name: Jane Doe
+    url: https://github.com/janedoe
+
+requires: # requirements surfaced to users before install
+  env: # env vars the MCP servers reference
+    - GITHUB_TOKEN
+  tools: # binaries MCP servers will execute
+    - npx
+```
+
+`requires.env` is derivable - kata scans `${env:VAR}` references in
+`mcp/servers.yaml` - so declare it only for vars kata cannot see (e.g. vars
+an instruction tells the agent to use).
+
+Programmatic consumers (registry CI, marketplace UIs) validate manifests
+with `validateManifest()` from `@katahq/core`: schema violations come back
+as errors, presentation lints (non-kebab-case name, non-semver version,
+over-long description) as warnings.
+
 ## Composing packages
 
 Declare packages in `config.yaml`; they apply in order, and your local
@@ -66,6 +110,16 @@ kata install npm:@company/kata-standards
 
 The `npm:` form resolves through `node_modules`, so the package version is
 managed by your lockfile like any other dependency.
+
+**From a local folder** - validates the manifest and wires up `compose`:
+
+```sh
+kata install ./shared/base-pkg
+```
+
+**Uninstalling** - `kata uninstall <name>` (the manifest name) removes the
+compose entry and deletes the vendored directory for git installs;
+local-path and npm packages are only unwired.
 
 ## Adapter plugins
 

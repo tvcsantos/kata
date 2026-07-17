@@ -1,6 +1,6 @@
 import { Flags } from "@oclif/core";
 import pc from "picocolors";
-import { planAll, planHasChanges, type Plan } from "@katahq/core";
+import { computeFileDiff, planAll, planHasChanges, summarizePlan, type Plan } from "@katahq/core";
 import { buildRegistry, enabledAdapters, loadProjectFromCwd, makeContext } from "../context.js";
 import { renderPlan } from "../render.js";
 import { KATA_TARGETS_ENABLE_HINT } from "../hints.js";
@@ -21,14 +21,32 @@ export async function computePlan(only?: string[], global = false): Promise<Plan
   return planAll(adapters, (adapter) => makeContext(project, adapter));
 }
 
+/** The plan as data: structured per-file diffs plus a summary. */
+export function planJson(plan: Plan): string {
+  return JSON.stringify(
+    {
+      targets: plan.targets.map((target) => ({
+        target: target.target,
+        detected: target.detected,
+        files: target.files.map(computeFileDiff),
+        warnings: target.warnings,
+      })),
+      summary: summarizePlan(plan),
+    },
+    null,
+    2,
+  );
+}
+
 export async function runPlan(opts: {
   target?: string[];
   diff: boolean;
   check?: boolean;
   global?: boolean;
+  json?: boolean;
 }): Promise<void> {
   const plan = await computePlan(opts.target, opts.global ?? false);
-  console.log(renderPlan(plan, { diff: opts.diff }));
+  console.log(opts.json ? planJson(plan) : renderPlan(plan, { diff: opts.diff }));
   if (opts.check && planHasChanges(plan)) process.exitCode = 1;
 }
 
@@ -43,6 +61,7 @@ export class PlanCommand extends KataCommand {
     }),
     check: Flags.boolean({ description: "exit 1 when changes exist (CI drift gate)" }),
     global: Flags.boolean({ char: "g", description: "plan the user-level ~/.kata/ config" }),
+    json: Flags.boolean({ description: "print the plan as JSON (structured diffs)" }),
   };
 
   override async run(): Promise<void> {

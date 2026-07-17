@@ -142,6 +142,54 @@ describe("compose + install + plugins (built CLI)", () => {
     expect(fake).toContain("Local instruction.");
   });
 
+  it("uninstall removes the vendored dir and compose entry; --json is parseable", async () => {
+    const src = await mkdtemp(path.join(os.tmpdir(), "kata-pkg-src-"));
+    try {
+      await write("kata-package.yaml", "name: throwaway\nversion: 0.1.0\n", src);
+      const git = (args: string[]) =>
+        exec(
+          "git",
+          [
+            "-c",
+            "user.email=t@example.com",
+            "-c",
+            "user.name=t",
+            "-c",
+            "commit.gpgsign=false",
+            ...args,
+          ],
+          { cwd: src },
+        );
+      await git(["init", "-q"]);
+      await git(["add", "-A"]);
+      await git(["commit", "-qm", "init"]);
+
+      const { stdout: installOut } = await run(["install", `file://${src}`, "--json"]);
+      const installed = JSON.parse(installOut) as {
+        name: string;
+        addedToCompose: boolean;
+        vendoredCommit: string | null;
+      };
+      expect(installed.name).toBe("throwaway");
+      expect(installed.addedToCompose).toBe(true);
+      expect(installed.vendoredCommit).toMatch(/^[0-9a-f]{40}$/);
+
+      const { stdout: planOut } = await run(["plan", "--json"]);
+      const plan = JSON.parse(planOut) as { targets: unknown[]; summary: object };
+      expect(plan.summary).toHaveProperty("creates");
+
+      const { stdout: uninstallOut } = await run(["uninstall", "throwaway"]);
+      expect(uninstallOut).toContain("Uninstalled throwaway");
+      const config = await readFile(path.join(tmp, ".kata/config.yaml"), "utf8");
+      expect(config).not.toContain("throwaway");
+      await expect(
+        readFile(path.join(tmp, ".kata/packages/throwaway/kata-package.yaml"), "utf8"),
+      ).rejects.toThrow();
+    } finally {
+      await rm(src, { recursive: true, force: true });
+    }
+  });
+
   it("watch applies .kata/ edits automatically", { timeout: 20000 }, async () => {
     const child = spawn(process.execPath, [CLI, "watch", "--target", "claude-code"], {
       cwd: tmp,

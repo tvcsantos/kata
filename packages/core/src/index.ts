@@ -4,14 +4,27 @@ export {
   mcpServerSchema,
   mcpServersFileSchema,
   packageManifestSchema,
+  packageAuthorSchema,
+  packageRequiresSchema,
   type KataConfig,
   type TargetConfig,
   type McpServer,
   type McpServersFile,
   type PackageManifest,
+  type PackageAuthor,
+  type PackageRequires,
   CONFIG_SCHEMA_VERSION,
   MCP_SERVERS_SCHEMA_VERSION,
 } from "./schema.js";
+
+export {
+  validateManifest,
+  deriveRequiredEnv,
+  MANIFEST_DESCRIPTION_MAX_LENGTH,
+  type ManifestIssue,
+  type ManifestValidation,
+  type ValidateManifestOptions,
+} from "./manifest.js";
 
 export {
   CONFIG_DIR_NAME,
@@ -110,5 +123,39 @@ export {
 } from "./plan.js";
 
 export { applyPlan, type ApplyResult } from "./apply.js";
+
+export {
+  computeFileDiff,
+  summarizePlan,
+  type DiffHunk,
+  type FileDiff,
+  type PlanSummary,
+} from "./diff.js";
+
+export {
+  initProject,
+  KataProject,
+  makeAdapterContext,
+  makeStandaloneContext,
+  openProject,
+  parsePackageSource,
+  selectEnabledAdapters,
+  slugFromGitUrl,
+  systemGitClone,
+  type EngineOptions,
+  type GitClone,
+  type InstalledPackage,
+  type InstallOptions,
+  type InstallProgress,
+  type InstallResult,
+  type PackageSource,
+  type PlanOptions,
+  type StagedInstall,
+  type StagedInstallResult,
+  type StagedUninstall,
+  type StagedUninstallResult,
+  type StagedUpdate,
+  type UninstallResult,
+} from "./engine.js";
 
 export { renderEnvRefs, collectEnvRefs, pureEnvRef } from "./env-refs.js";
