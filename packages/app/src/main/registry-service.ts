@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 import type { PackageSource } from "@katahq/core";
 import type { RegistryBundle, RegistryIndex } from "../shared/registry";
 
-export const DEFAULT_REGISTRY_URL = "https://tvcsantos.github.io/kata-registry/index.json";
+export const DEFAULT_REGISTRY_URL = "https://tiago.santos.com.pt/kata-registry/index.json";
 
 /** Serve the cache without a network round-trip when younger than this. */
 const CACHE_FRESH_MS = 15 * 60 * 1000;
