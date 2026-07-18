@@ -19,6 +19,9 @@ afterPack: build/after-pack.cjs
 files:
   - out/**/*
   - package.json
+  # Packed into the asar for the runtime BrowserWindow icon, which is what
+  # Windows/Linux show in the taskbar/window (macOS uses the bundle .icns).
+  - resources/icon.png
 
 # Machine-readable update channel: a single rolling `desktop-latest` release
 # holds the newest installers + latest*.yml, so the updater resolves the app
@@ -55,7 +58,12 @@ nsis:
   artifactName: ${productName}-${version}-setup.${ext}
 
 linux:
-  icon: resources/icon.png
+  # A directory of standard hicolor sizes: a single 1024px png installs only
+  # a 1024x1024 hicolor icon, which desktop environments never look up.
+  icon: resources/icons
+  # Without this the binary/desktop-file/icon are named after the npm
+  # package ("@katahqapp").
+  executableName: kata
   category: Development
   synopsis: Discover and install agent-config bundles for your coding agents
   # Without this the deb is named after the npm package (@katahq/app_...),
