@@ -9,7 +9,9 @@ uses, so both always behave identically.
 
 ## Installing
 
-Download the latest installer for your platform from the
+<DownloadCards repo="tvcsantos/kata" tag="desktop-latest" />
+
+All installers are also on the
 [**desktop-latest release**](https://github.com/tvcsantos/kata/releases/tag/desktop-latest).
 
 ::: warning Not code-signed
@@ -45,7 +47,7 @@ Download `Kata-<version>-setup.exe` and run it. SmartScreen may show
 ### Linux
 
 Download the `.AppImage` (portable - `chmod +x` and run) or the `.deb`
-(`sudo apt install ./Kata-<version>-x64.deb`).
+(`sudo apt install ./Kata-<version>-amd64.deb`).
 
 ## Staying up to date
 

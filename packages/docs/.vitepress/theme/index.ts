@@ -6,6 +6,7 @@ import { useRoute, inBrowser } from 'vitepress'
 import 'lightbox3/style.css'
 import { Lightbox } from 'lightbox3'
 import CopyOrDownloadAsMarkdownButtons from 'vitepress-plugin-llms/vitepress-components/CopyOrDownloadAsMarkdownButtons.vue'
+import DownloadCards from './components/DownloadCards.vue'
 // @ts-expect-error -- CSS side-effect import handled by Vite
 import './custom.css'
 
@@ -13,6 +14,7 @@ export default {
   extends: DefaultTheme,
   enhanceApp({ app }) {
     app.component('CopyOrDownloadAsMarkdownButtons', CopyOrDownloadAsMarkdownButtons)
+    app.component('DownloadCards', DownloadCards)
   },
   setup() {
     const route = useRoute()
