@@ -24,10 +24,11 @@ through. Each platform's steps are below.
 The app is ad-hoc signed so it runs on Apple Silicon, but Gatekeeper still
 flags it as unverified on first launch.
 
-**Homebrew (recommended)** - avoids the warning entirely:
+**Homebrew (recommended)** - avoids the warning entirely (the cask clears
+the quarantine attribute after install):
 
 ```sh
-brew install --cask --no-quarantine tvcsantos/kata/kata
+brew install --cask tvcsantos/kata/kata
 ```
 
 **DMG** - download `Kata-<version>-arm64.dmg` (Apple Silicon) or

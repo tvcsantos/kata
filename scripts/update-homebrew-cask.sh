@@ -49,13 +49,19 @@ cask "kata" do
 
   app "Kata.app"
 
+  # Not notarized (no Apple Developer account): strip the Gatekeeper
+  # quarantine attribute so the app opens without the "Open Anyway" dance.
+  postflight do
+    system_command "/usr/bin/xattr",
+                   args: ["-cr", "#{appdir}/Kata.app"]
+  end
+
   caveats <<~CAVEATS
-    Kata is not notarized (no Apple Developer account). Install without the
-    Gatekeeper quarantine:
+    Kata is not notarized (no Apple Developer account). The quarantine
+    attribute is removed on install, so it opens normally. If macOS still
+    blocks it, run:
 
-      brew install --cask --no-quarantine tvcsantos/kata/kata
-
-    Otherwise open it once via System Settings > Privacy & Security > Open Anyway.
+      xattr -cr "#{appdir}/Kata.app"
   CAVEATS
 
   zap trash: "~/Library/Application Support/@katahq/app"
