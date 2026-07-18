@@ -1,14 +1,9 @@
 {
   "name": "@katahq/app",
   "private": true,
-<<<<<<< Updated upstream
   "version": "0.5.0",
   "description": "kata desktop app - discover and install agent-config bundles",
-=======
-  "version": "0.4.0",
-  "description": "Kata desktop app - discover and install agent-config bundles",
   "author": "Tiago Santos",
->>>>>>> Stashed changes
   "main": "out/main/index.js",
   "scripts": {
     "dev": "electron-vite dev",
@@ -19,7 +14,6 @@
     "dist": "electron-vite build && electron-builder"
   },
   "dependencies": {
-<<<<<<< Updated upstream
     "@katahq/adapter-claude-code": "^0.5.0",
     "@katahq/adapter-codex": "^0.5.0",
     "@katahq/adapter-copilot": "^0.5.0",
@@ -28,17 +22,8 @@
     "@katahq/adapter-opencode": "^0.5.0",
     "@katahq/adapter-vscode": "^0.5.0",
     "@katahq/core": "^0.5.0",
-    "react-markdown": "^10.1.0"
-=======
-    "@katahq/adapter-claude-code": "^0.4.0",
-    "@katahq/adapter-codex": "^0.4.0",
-    "@katahq/adapter-copilot": "^0.4.0",
-    "@katahq/adapter-cursor": "^0.4.0",
-    "@katahq/adapter-gemini": "^0.4.0",
-    "@katahq/adapter-opencode": "^0.4.0",
-    "@katahq/core": "^0.4.0",
+    "react-markdown": "^10.1.0",
     "electron-updater": "^6.3.0"
->>>>>>> Stashed changes
   },
   "devDependencies": {
     "@types/react": "^19.2.0",
