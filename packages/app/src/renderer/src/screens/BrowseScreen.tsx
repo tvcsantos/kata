@@ -162,7 +162,7 @@ export function BrowseScreen(props: {
       <div className="filters">
         <input
           type="search"
-          placeholder="Search bundles…"
+          placeholder="Search bundles..."
           value={query}
           onChange={(event) => setQuery(event.target.value)}
         />
@@ -183,7 +183,7 @@ export function BrowseScreen(props: {
               ref={personaSearch}
               type="search"
               className="dropdown-search"
-              placeholder="Filter personas…"
+              placeholder="Filter personas..."
               value={personaQuery}
               onChange={(event) => setPersonaQuery(event.target.value)}
             />

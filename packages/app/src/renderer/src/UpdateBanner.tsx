@@ -25,7 +25,7 @@ export function UpdateBanner(): React.JSX.Element | null {
       <div className="update-banner">
         <span>
           Kata {state.version} is available
-          {state.mode === "auto" ? " — downloading…" : "."}
+          {state.mode === "auto" ? " - downloading..." : "."}
         </span>
         <div className="update-banner-actions">
           {state.mode === "manual" && (
@@ -45,7 +45,7 @@ export function UpdateBanner(): React.JSX.Element | null {
     return (
       <div className="update-banner">
         <span>
-          Downloading Kata {state.version}… {state.percent}%
+          Downloading Kata {state.version}... {state.percent}%
         </span>
       </div>
     );

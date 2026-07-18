@@ -60,7 +60,7 @@ export function BundleDetailScreen(props: {
           ← Bundles
         </button>
         <button className="primary" onClick={props.onInstall}>
-          Install on a project…
+          Install on a project...
         </button>
       </div>
 

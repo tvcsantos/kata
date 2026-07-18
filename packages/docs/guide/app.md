@@ -106,7 +106,7 @@ what gets installed.
 ## Installing into a project
 
 Installs are **plan-before-apply, always**. Clicking _Install on a
-project…_ opens a self-contained flow:
+project..._ opens a self-contained flow:
 
 **1. Pick the target project** - recent projects are offered, or open any
 folder. If the folder is not a kata project yet, the app offers to run

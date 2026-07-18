@@ -20,7 +20,7 @@ export interface PlannedFile {
   newContent: string | Buffer;
 }
 
-/** Human-readable path: global files render as `~/…`. */
+/** Human-readable path: global files render as `~/...`. */
 export function displayPath(relativePath: string, scope: Scope): string {
   return scope === "global" ? `~/${relativePath}` : relativePath;
 }

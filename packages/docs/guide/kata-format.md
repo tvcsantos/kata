@@ -18,7 +18,7 @@ offending file and field.
   skills/
     deploy/
       SKILL.md           # skill directories (SKILL.md required)
-      scripts/…          # plus supporting files
+      scripts/...          # plus supporting files
 ```
 
 ## `config.yaml`
@@ -119,9 +119,9 @@ themselves treat scopes:
 - **project** - the repo's `.kata/`, rendered into repo-level files
   (`.mcp.json`, `CLAUDE.md`, `.cursor/`). This is the default everywhere.
 - **global** - the user-level `~/.kata/`, managed with the `-g/--global`
-  flag (`kata init --global`, `kata apply --global`, …) and rendered into
+  flag (`kata init --global`, `kata apply --global`, ...) and rendered into
   each tool's user-level files (`~/.claude/CLAUDE.md`, `~/.codex/config.toml`,
-  `~/.gemini/`, `~/.config/opencode/`, …). Write personal instructions,
+  `~/.gemini/`, `~/.config/opencode/`, ...). Write personal instructions,
   prompts, or MCP servers once and every project gets them.
 
 Additionally, an MCP server inside a _project_ config may declare

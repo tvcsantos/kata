@@ -177,7 +177,7 @@ export function InstallModal(props: {
             <div className="modal-actions">
               <button onClick={props.onClose}>Cancel</button>
               <button className="primary" onClick={() => void pickFolder()}>
-                Open folder…
+                Open folder...
               </button>
             </div>
           </>
@@ -186,7 +186,7 @@ export function InstallModal(props: {
         {step.step === "staging" && (
           <>
             <h2>Install {bundle.name}</h2>
-            <p className="empty">Fetching the bundle and computing the plan…</p>
+            <p className="empty">Fetching the bundle and computing the plan...</p>
           </>
         )}
 
@@ -213,7 +213,7 @@ export function InstallModal(props: {
                 disabled={step.step === "applying"}
               >
                 {step.step === "applying"
-                  ? "Applying…"
+                  ? "Applying..."
                   : `Apply ${step.preview.summary.creates + step.preview.summary.updates} change(s)`}
               </button>
             </div>

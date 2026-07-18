@@ -55,7 +55,7 @@ share `.github/copilot-instructions.md`, `.github/agents/`, and
 foreign keys, enabling any combination converges byte-for-byte instead of
 fighting: after one `apply`, a second `plan` is clean.
 
-More adapters (Gemini CLI, OpenCode, Copilot, …) are planned; the columns will
+More adapters (Gemini CLI, OpenCode, Copilot, ...) are planned; the columns will
 grow with them.
 
 ## claude-code

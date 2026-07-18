@@ -9,7 +9,7 @@ my-standards/
   instructions/
     10-style.md
   mcp/servers.yaml
-  prompts/…  agents/…  skills/…
+  prompts/...  agents/...  skills/...
 ```
 
 `kata-package.yaml`:
@@ -86,7 +86,7 @@ Override rules (deterministic):
   `10-style.md` completely replaces a package's `10-style.md`).
 - MCP servers override by server name.
 - Instructions still compose in file-name order after merging, so packages can
-  interleave with local files via prefixes (`10-…`, `20-…`).
+  interleave with local files via prefixes (`10-...`, `20-...`).
 
 ## Installing packages
 

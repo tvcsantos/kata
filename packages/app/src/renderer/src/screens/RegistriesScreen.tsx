@@ -113,7 +113,7 @@ export function RegistriesScreen(props: {
       <div className="registry-add">
         <input
           type="text"
-          placeholder="https://example.com/index.json (or file:///…)"
+          placeholder="https://example.com/index.json (or file:///...)"
           value={url}
           onChange={(event) => setUrl(event.target.value)}
         />

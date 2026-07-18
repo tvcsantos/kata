@@ -50,7 +50,7 @@ export async function runInstall(reference: string, opts: InstallOptions): Promi
           project.scope,
           progress.destinationDir,
         );
-        console.log(`Cloning ${progress.url} into ${shownDir}…`);
+        console.log(`Cloning ${progress.url} into ${shownDir}...`);
       }
     },
   });

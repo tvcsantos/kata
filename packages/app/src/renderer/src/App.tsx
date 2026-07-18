@@ -76,7 +76,7 @@ export function App(): React.JSX.Element {
       return (
         <section>
           <h1>Bundles</h1>
-          <p className="empty">Loading…</p>
+          <p className="empty">Loading...</p>
         </section>
       );
     }
@@ -100,7 +100,7 @@ export function App(): React.JSX.Element {
       return (
         <section>
           <h1>Bundles</h1>
-          <p className="empty">Loading the registry…</p>
+          <p className="empty">Loading the registry...</p>
         </section>
       );
     }

@@ -60,7 +60,7 @@ Or configure every project at once via the user-level `~/.kata/`:
 ```sh
 kata init --global
 $EDITOR ~/.kata/instructions/base.md
-kata apply --global             # emits ~/.claude/CLAUDE.md, ~/.codex/config.toml, …
+kata apply --global             # emits ~/.claude/CLAUDE.md, ~/.codex/config.toml, ...
 ```
 
 ## Commands

@@ -95,7 +95,7 @@ export function AboutScreen(props: { onBack: () => void }): React.JSX.Element {
             </tbody>
           </table>
         ) : (
-          <p className="empty">Loading…</p>
+          <p className="empty">Loading...</p>
         )}
 
         <h2>Appearance</h2>

@@ -17,7 +17,7 @@ flowchart LR
   kata --> claude["CLAUDE.md · .mcp.json"]
   kata --> codex["AGENTS.md · .codex/config.toml"]
   kata --> cursor[".cursor/rules · .cursor/mcp.json"]
-  kata --> more["…"]
+  kata --> more["..."]
 ```
 
 1. You describe instructions and MCP servers once, in `.kata/`.
