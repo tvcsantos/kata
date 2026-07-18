@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- Next Version Placeholder -->
 
+## [0.10.0](https://github.com/tvcsantos/kata/compare/@katahq/app@0.9.0...@katahq/app@0.10.0) - 2026-07-18
+
+### 🐛 Bug Fixes
+
+- Fix app data location ([5eb01b7](https://github.com/tvcsantos/kata/commit/5eb01b74ee181faaa0118c45a0933ca0a7aa2e98))
+- Fix missing icon on linux ([e075708](https://github.com/tvcsantos/kata/commit/e0757086df52e4b89f0c8fc436ecc1717edab4c4))
+
 ## [0.8.0](https://github.com/tvcsantos/kata/compare/@katahq/app@0.7.0...@katahq/app@0.8.0) - 2026-07-18
 
 ### 🤖 Build

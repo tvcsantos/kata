@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- Next Version Placeholder -->
 
+## [0.10.0](https://github.com/tvcsantos/kata/compare/@katahq/docs@0.9.0...@katahq/docs@0.10.0) - 2026-07-18
+
+### 📝 Documentation
+
+- Add download cards ([eccb525](https://github.com/tvcsantos/kata/commit/eccb525dd645d2262a7f19a21313e0d0ee72ec6b))
+
 ## [0.9.0](https://github.com/tvcsantos/kata/compare/@katahq/docs@0.8.0...@katahq/docs@0.9.0) - 2026-07-18
 
 ### 🤖 Build

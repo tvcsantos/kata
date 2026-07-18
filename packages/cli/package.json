@@ -1,6 +1,6 @@
 {
   "name": "@katahq/cli",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "description": "One tool to configure all your AI harnesses / agents",
   "keywords": [
     "agent",
@@ -59,14 +59,14 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@katahq/adapter-claude-code": "^0.9.0",
-    "@katahq/adapter-codex": "^0.9.0",
-    "@katahq/adapter-copilot": "^0.9.0",
-    "@katahq/adapter-cursor": "^0.9.0",
-    "@katahq/adapter-gemini": "^0.9.0",
-    "@katahq/adapter-opencode": "^0.9.0",
-    "@katahq/adapter-vscode": "^0.9.0",
-    "@katahq/core": "^0.9.0",
+    "@katahq/adapter-claude-code": "^0.10.0",
+    "@katahq/adapter-codex": "^0.10.0",
+    "@katahq/adapter-copilot": "^0.10.0",
+    "@katahq/adapter-cursor": "^0.10.0",
+    "@katahq/adapter-gemini": "^0.10.0",
+    "@katahq/adapter-opencode": "^0.10.0",
+    "@katahq/adapter-vscode": "^0.10.0",
+    "@katahq/core": "^0.10.0",
     "@oclif/core": "^4.11.14",
     "diff": "^8.0.0",
     "picocolors": "^1.1.0",
