@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- Next Version Placeholder -->
 
+## [0.8.0](https://github.com/tvcsantos/kata/compare/@katahq/app@0.7.0...@katahq/app@0.8.0) - 2026-07-18
+
+### 🤖 Build
+
+- Fix linux missing author email ([480adbf](https://github.com/tvcsantos/kata/commit/480adbfb7b9f77712effb57fb6aa0fe3a4c38122))
+
 ## [0.7.0](https://github.com/tvcsantos/kata/compare/@katahq/app@0.6.0...@katahq/app@0.7.0) - 2026-07-18
 
 ### 🤖 Build
