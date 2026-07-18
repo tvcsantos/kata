@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- Next Version Placeholder -->
 
+## [0.7.0](https://github.com/tvcsantos/kata/compare/@katahq/app@0.6.0...@katahq/app@0.7.0) - 2026-07-18
+
+### 🤖 Build
+
+- Remove deprecated externalizeDepsPlugin ([f075785](https://github.com/tvcsantos/kata/commit/f075785c25312970d62e27b0c89e819decc56839))
+
 ## [0.6.0](https://github.com/tvcsantos/kata/compare/@katahq/app@0.5.0...@katahq/app@0.6.0) - 2026-07-18
 
 ### ✨ Features
