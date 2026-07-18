@@ -100,10 +100,6 @@ void app.whenReady().then(() => {
 
   // Check for app updates shortly after launch, out of the startup path.
   setTimeout(() => void updates.check(), 4000);
-
-  app.on("activate", () => {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
-  });
 });
 
 app.on("web-contents-created", (_event, contents) => {
@@ -113,6 +109,8 @@ app.on("web-contents-created", (_event, contents) => {
   });
 });
 
+// Single-window utility: closing the window quits, macOS included - no
+// lingering dock process to quit separately.
 app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") app.quit();
+  app.quit();
 });
