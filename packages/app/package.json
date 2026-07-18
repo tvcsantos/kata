@@ -1,7 +1,7 @@
 {
   "name": "@katahq/app",
   "private": true,
-  "version": "0.10.0",
+  "version": "0.11.0",
   "description": "kata desktop app - discover and install agent-config bundles",
   "author": "Tiago Santos <tvcsantos@gmail.com>",
   "homepage": "https://tiago.santos.com.pt/kata/",
@@ -15,14 +15,14 @@
     "dist": "electron-vite build && electron-builder"
   },
   "dependencies": {
-    "@katahq/adapter-claude-code": "^0.10.0",
-    "@katahq/adapter-codex": "^0.10.0",
-    "@katahq/adapter-copilot": "^0.10.0",
-    "@katahq/adapter-cursor": "^0.10.0",
-    "@katahq/adapter-gemini": "^0.10.0",
-    "@katahq/adapter-opencode": "^0.10.0",
-    "@katahq/adapter-vscode": "^0.10.0",
-    "@katahq/core": "^0.10.0",
+    "@katahq/adapter-claude-code": "^0.11.0",
+    "@katahq/adapter-codex": "^0.11.0",
+    "@katahq/adapter-copilot": "^0.11.0",
+    "@katahq/adapter-cursor": "^0.11.0",
+    "@katahq/adapter-gemini": "^0.11.0",
+    "@katahq/adapter-opencode": "^0.11.0",
+    "@katahq/adapter-vscode": "^0.11.0",
+    "@katahq/core": "^0.11.0",
     "react-markdown": "^10.1.0",
     "electron-updater": "^6.3.0"
   },
