@@ -58,6 +58,9 @@ linux:
   icon: resources/icon.png
   category: Development
   synopsis: Discover and install agent-config bundles for your coding agents
+  # Without this the deb is named after the npm package (@katahq/app_...),
+  # whose "/" breaks the release upload glob.
+  artifactName: ${productName}-${version}-${arch}.${ext}
   target:
     - AppImage
     - deb

@@ -3,7 +3,8 @@
   "private": true,
   "version": "0.7.0",
   "description": "kata desktop app - discover and install agent-config bundles",
-  "author": "Tiago Santos",
+  "author": "Tiago Santos <tvcsantos@gmail.com>",
+  "homepage": "https://tiago.santos.com.pt/kata/",
   "main": "out/main/index.js",
   "scripts": {
     "dev": "electron-vite dev",

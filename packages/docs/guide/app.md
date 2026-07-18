@@ -44,7 +44,7 @@ Download `Kata-<version>-setup.exe` and run it. SmartScreen may show
 ### Linux
 
 Download the `.AppImage` (portable - `chmod +x` and run) or the `.deb`
-(`sudo apt install ./Kata-<version>.deb`).
+(`sudo apt install ./Kata-<version>-x64.deb`).
 
 ## Staying up to date
 
