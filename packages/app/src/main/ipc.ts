@@ -1,5 +1,3 @@
-import { createRequire } from "node:module";
-import path from "node:path";
 import { app, dialog, ipcMain, nativeTheme } from "electron";
 import type { AppVersions } from "../shared/bridge";
 import type { EngineService } from "./engine-service";
@@ -7,17 +5,13 @@ import type { PreferencesStore } from "./preferences-store";
 import type { ProjectStore } from "./project-store";
 import type { RegistryManager } from "./registry-manager";
 import { DEFAULT_REGISTRY_URL } from "./registry-service";
+import type { UpdateService } from "./update-service";
+
+/** Injected by electron-vite `define` from the bundled @katahq/core version. */
+declare const __CORE_VERSION__: string;
 
 function embeddedCoreVersion(): string | null {
-  try {
-    // Resolve from the app dir, not this bundled file, so it works in
-    // both the CJS dev bundle and a packaged app.
-    const require = createRequire(path.join(app.getAppPath(), "package.json"));
-    const corePackageJson = require("@katahq/core/package.json") as { version?: string };
-    return corePackageJson.version ?? null;
-  } catch {
-    return null;
-  }
+  return typeof __CORE_VERSION__ === "string" ? __CORE_VERSION__ : null;
 }
 
 /**
@@ -29,6 +23,7 @@ export function registerIpcHandlers(
   store: ProjectStore,
   registry: RegistryManager,
   preferences: PreferencesStore,
+  updates: UpdateService,
 ): void {
   ipcMain.handle("kata:pickProjectFolder", async () => {
     const result = await dialog.showOpenDialog({
@@ -118,6 +113,10 @@ export function registerIpcHandlers(
     await preferences.setTheme(value);
     nativeTheme.themeSource = value;
   });
+
+  ipcMain.handle("kata:getUpdateState", () => updates.current());
+  ipcMain.handle("kata:checkForUpdates", () => updates.check());
+  ipcMain.handle("kata:installUpdate", () => updates.install());
 
   ipcMain.handle("kata:setPersonas", (_event, slugs: unknown) => {
     const list = Array.isArray(slugs) ? slugs.map(String) : [];

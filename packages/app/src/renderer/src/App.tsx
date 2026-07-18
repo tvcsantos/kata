@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import type { RegistryBundle, RegistryView } from "../../shared/registry";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { Splash } from "./Splash";
+import { UpdateBanner } from "./UpdateBanner";
 import { AboutScreen } from "./screens/AboutScreen";
 import { BrowseScreen } from "./screens/BrowseScreen";
 import { BundleDetailScreen } from "./screens/BundleDetailScreen";
@@ -162,6 +163,7 @@ export function App(): React.JSX.Element {
 
   return (
     <main>
+      <UpdateBanner />
       <div className="content screen-in">
         <ErrorBoundary>
           {renderScreen()}

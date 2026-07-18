@@ -5,7 +5,7 @@ import { registerIpcHandlers } from "./ipc";
 import { PreferencesStore } from "./preferences-store";
 import { ProjectStore } from "./project-store";
 import { RegistryManager } from "./registry-manager";
-import { DEFAULT_REGISTRY_URL } from "./registry-service";
+import { UpdateService } from "./update-service";
 
 /**
  * Security posture (see PLAN_APP.md §7): the renderer displays third-party
@@ -15,6 +15,8 @@ import { DEFAULT_REGISTRY_URL } from "./registry-service";
  */
 
 const appIcon = nativeImage.createFromPath(path.join(__dirname, "../../resources/icon.png"));
+
+let mainWindow: BrowserWindow | null = null;
 
 function createWindow(): void {
   const window = new BrowserWindow({
@@ -34,7 +36,11 @@ function createWindow(): void {
     },
   });
 
+  mainWindow = window;
   window.on("ready-to-show", () => window.show());
+  window.on("closed", () => {
+    if (mainWindow === window) mainWindow = null;
+  });
 
   // External links open in the OS browser, never inside the app.
   window.webContents.setWindowOpenHandler(({ url }) => {
@@ -80,9 +86,15 @@ void app.whenReady().then(() => {
     nativeTheme.themeSource = theme;
   });
   const registry = new RegistryManager(app.getPath("userData"), preferences);
-  registerIpcHandlers(engine, store, registry, preferences);
+  const updates = new UpdateService((state) => {
+    mainWindow?.webContents.send("kata:updateState", state);
+  });
+  registerIpcHandlers(engine, store, registry, preferences, updates);
 
   createWindow();
+
+  // Check for app updates shortly after launch, out of the startup path.
+  setTimeout(() => void updates.check(), 4000);
 
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();

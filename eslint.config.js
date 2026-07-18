@@ -15,6 +15,23 @@ export default tseslint.config(
       globals: { window: "readonly", document: "readonly", console: "readonly" },
     },
   },
+  // electron-builder hooks are CommonJS scripts executed by Node.
+  {
+    files: ["packages/app/build/**/*.cjs"],
+    languageOptions: {
+      sourceType: "commonjs",
+      globals: {
+        require: "readonly",
+        module: "writable",
+        console: "readonly",
+        process: "readonly",
+        __dirname: "readonly",
+      },
+    },
+    rules: {
+      "@typescript-eslint/no-require-imports": "off",
+    },
+  },
   // Type-aware rules for package sources only: each package's tsconfig
   // includes just src/, so tests and config files stay on the fast rules.
   {

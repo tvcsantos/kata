@@ -91,6 +91,23 @@ export interface ChangeOutcome {
   requiresEnv: string[];
 }
 
+/**
+ * App self-update state. `mode` distinguishes the two tiers: "auto" (Windows
+ * and Linux) downloads in-app and installs on restart; "manual" (macOS,
+ * which can't self-update unsigned) points the user at the download page.
+ */
+export type UpdateState =
+  | { status: "unsupported" } // dev build or platform without a channel
+  | { status: "idle" }
+  | { status: "checking" }
+  | { status: "not-available" }
+  | { status: "available"; version: string; mode: "auto" | "manual" }
+  | { status: "downloading"; version: string; percent: number }
+  | { status: "downloaded"; version: string }
+  | { status: "error"; message: string };
+
+export type Unsubscribe = () => void;
+
 export interface KataBridge {
   /** Native folder dialog (main-side); null when the user cancels. */
   pickProjectFolder(): Promise<string | null>;
@@ -128,4 +145,11 @@ export interface KataBridge {
   // Appearance: follow the system or force light/dark.
   getTheme(): Promise<"system" | "light" | "dark">;
   setTheme(theme: "system" | "light" | "dark"): Promise<void>;
+
+  // App self-update (two-tier: auto on Windows/Linux, notify on macOS).
+  getUpdateState(): Promise<UpdateState>;
+  checkForUpdates(): Promise<void>;
+  /** auto: restart into the new version; manual: open the download page. */
+  installUpdate(): Promise<void>;
+  onUpdateState(callback: (state: UpdateState) => void): Unsubscribe;
 }

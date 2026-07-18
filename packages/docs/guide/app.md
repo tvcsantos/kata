@@ -7,11 +7,54 @@ with a full diff preview before anything touches disk. No Node, no CLI
 knowledge required - the app embeds the same `@katahq/core` engine the CLI
 uses, so both always behave identically.
 
-::: info Availability
-The app is under active development in the kata monorepo (`packages/app`).
-Packaged installers are on the roadmap; today it runs from source with
-`npm run dev -w @katahq/app`.
+## Installing
+
+Download the latest installer for your platform from the
+[**desktop-latest release**](https://github.com/tvcsantos/kata/releases/tag/desktop-latest).
+
+::: warning Not code-signed
+Kata is an open-source project without an Apple Developer account or a
+Windows code-signing certificate, so the builds are not notarized/signed.
+They are safe, but your OS shows a one-time warning you have to click
+through. Each platform's steps are below.
 :::
+
+### macOS
+
+The app is ad-hoc signed so it runs on Apple Silicon, but Gatekeeper still
+flags it as unverified on first launch.
+
+**Homebrew (recommended)** - avoids the warning entirely:
+
+```sh
+brew install --cask --no-quarantine tvcsantos/kata/kata
+```
+
+**DMG** - download `Kata-<version>-arm64.dmg` (Apple Silicon) or
+`-x64.dmg` (Intel), drag Kata to Applications, then the first time you open
+it: **System Settings → Privacy & Security → Open Anyway**. (Right-click →
+Open no longer works on recent macOS.) Or clear the quarantine flag from a
+terminal: `xattr -cr /Applications/Kata.app`.
+
+### Windows
+
+Download `Kata-<version>-setup.exe` and run it. SmartScreen may show
+"Windows protected your PC" - click **More info → Run anyway**.
+
+### Linux
+
+Download the `.AppImage` (portable - `chmod +x` and run) or the `.deb`
+(`sudo apt install ./Kata-<version>.deb`).
+
+## Staying up to date
+
+The app checks for updates on launch and shows a banner when a newer version
+is available:
+
+- **Windows and Linux** download the update in the background and offer a
+  **Restart to update** button.
+- **macOS** links to the download page (unsigned apps can't self-update);
+  with the Homebrew cask, `brew upgrade --cask kata` updates it instead.
 
 ## First run
 

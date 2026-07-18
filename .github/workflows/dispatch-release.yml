@@ -84,8 +84,9 @@ jobs:
           script: |
             const changedModules = JSON.parse(process.env.CHANGED_MODULES);
 
-            // Only these workspaces are published to npm
-            const ignorePackages = ["kata-monorepo", "@katahq/docs"];
+            // Not published to npm: the monorepo root, the docs site, and the
+            // desktop app (private; shipped as installers, not an npm package).
+            const ignorePackages = ["kata-monorepo", "@katahq/docs", "@katahq/app"];
 
             const packages = changedModules
               .map((module) => module.name)
@@ -102,4 +103,29 @@ jobs:
               workflow_id: "dispatch-publish.yml",
               ref: "main",
               inputs: { packages: packages.join(" ") },
+            });
+
+      # The desktop app ships as installers, not an npm package. When it is
+      # bumped, dispatch the matrix build that packages and releases them.
+      - name: Trigger desktop app release
+        if: steps.versu.outputs.bumped == 'true' && !inputs.dry-run
+        uses: actions/github-script@v9
+        env:
+          CREATED_TAGS: ${{ steps.versu.outputs.created-tags }}
+        with:
+          script: |
+            const createdTags = JSON.parse(process.env.CREATED_TAGS);
+            const app = createdTags.find((entry) => entry.moduleId === "@katahq/app");
+
+            if (!app) {
+              core.info("@katahq/app not bumped - skipping desktop app release");
+              return;
+            }
+
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: "dispatch-app-release.yml",
+              ref: "main",
+              inputs: { tag: app.tag },
             });

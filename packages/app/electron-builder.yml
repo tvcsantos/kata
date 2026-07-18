@@ -1,0 +1,66 @@
+appId: com.tvcsantos.kata
+productName: Kata
+copyright: Copyright © 2026 Tiago Santos
+
+# Pinned because deps are hoisted to the workspace root, so electron-builder
+# cannot infer the version from a local node_modules/electron. Keep in sync
+# with the electron devDependency range.
+electronVersion: 43.1.1
+
+directories:
+  output: release
+  buildResources: resources
+
+afterPack: build/after-pack.cjs
+
+# The renderer/main/preload are pre-bundled by electron-vite into out/;
+# electron-builder additionally packs the production `dependencies` from
+# node_modules (the @katahq/* engine + adapters and electron-updater).
+files:
+  - out/**/*
+  - package.json
+
+# Machine-readable update channel: a single rolling `desktop-latest` release
+# holds the newest installers + latest*.yml, so the updater resolves the app
+# correctly regardless of the many per-package releases in this monorepo.
+publish:
+  provider: generic
+  url: https://github.com/tvcsantos/kata/releases/download/desktop-latest
+  channel: latest
+
+mac:
+  category: public.app-category.developer-tools
+  icon: resources/icon.png
+  target:
+    - target: dmg
+      arch: [arm64, x64]
+    - target: zip # electron-updater consumes the zip on macOS
+      arch: [arm64, x64]
+  # No Apple Developer account: with no signing identity electron-builder
+  # applies an ad-hoc signature (so the app launches on Apple Silicon), but
+  # the build is not Developer-ID signed or notarized. The install docs
+  # cover the one-time Gatekeeper "Open Anyway" step. CI sets
+  # CSC_IDENTITY_AUTO_DISCOVERY=false so it doesn't hunt for a real cert.
+
+win:
+  icon: resources/icon.png
+  target:
+    - target: nsis
+      arch: [x64]
+
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  artifactName: ${productName}-${version}-setup.${ext}
+
+linux:
+  icon: resources/icon.png
+  category: Development
+  synopsis: Discover and install agent-config bundles for your coding agents
+  target:
+    - AppImage
+    - deb
+
+dmg:
+  artifactName: ${productName}-${version}-${arch}.${ext}

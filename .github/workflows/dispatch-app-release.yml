@@ -1,0 +1,121 @@
+name: Desktop App Release (Manual)
+
+# Builds the Kata desktop app installers for macOS, Windows, and Linux and
+# attaches them to the `@katahq/app@<version>` GitHub Release, then refreshes
+# the rolling `desktop-latest` release that the in-app auto-updater reads.
+#
+# Dispatched by the Release workflow when @katahq/app is bumped (tags pushed
+# with GITHUB_TOKEN do not trigger tag workflows), or run manually.
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "The @katahq/app tag to build (e.g. @katahq/app@0.4.0)"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: app-release
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            builder-args: "--mac --arm64 --x64"
+          - os: windows-latest
+            builder-args: "--win --x64"
+          - os: ubuntu-latest
+            builder-args: "--linux --x64"
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout the released tag
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.tag }}
+
+      - name: Use Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build workspaces
+        run: npm run build
+
+      - name: Package installers
+        working-directory: packages/app
+        env:
+          # No Apple Developer account: ad-hoc sign only, don't hunt for a cert.
+          CSC_IDENTITY_AUTO_DISCOVERY: "false"
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx electron-builder ${{ matrix.builder-args }} --publish never
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: installers-${{ matrix.os }}
+          if-no-files-found: error
+          path: |
+            packages/app/release/*.dmg
+            packages/app/release/*.zip
+            packages/app/release/*.exe
+            packages/app/release/*.AppImage
+            packages/app/release/*.deb
+            packages/app/release/*.yml
+            packages/app/release/*.blockmap
+
+  publish:
+    name: Publish + refresh channel
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (for the cask script)
+        uses: actions/checkout@v7
+
+      - name: Download all installers
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: Attach installers to the versioned release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release upload "${{ inputs.tag }}" dist/* --clobber --repo "${{ github.repository }}"
+
+      - name: Refresh the rolling desktop-latest channel
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Recreate from scratch so stale installers never linger in the channel.
+          gh release delete desktop-latest --cleanup-tag --yes --repo "${{ github.repository }}" || true
+          gh release create desktop-latest dist/* \
+            --repo "${{ github.repository }}" \
+            --target main \
+            --title "Kata desktop (latest)" \
+            --notes "Rolling channel for the Kata desktop auto-updater - installers + metadata for the newest release. See the versioned releases for changelogs." \
+            --prerelease
+
+      - name: Update the Homebrew cask
+        env:
+          # Optional: a PAT with contents:write on tvcsantos/homebrew-kata.
+          # Without it the cask update is skipped (the release still ships).
+          GH_TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN }}
+        run: |
+          if [ -z "${GH_TOKEN}" ]; then
+            echo "HOMEBREW_TAP_TOKEN not set - skipping Homebrew cask update"
+            exit 0
+          fi
+          version="${{ inputs.tag }}"
+          version="${version##*@}" # strip the @katahq/app@ prefix -> x.y.z
+          bash scripts/update-homebrew-cask.sh "$version" dist

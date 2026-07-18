@@ -1299,3 +1299,42 @@ a.icon-link:hover {
     border-color: var(--accent);
   }
 }
+
+/* ── Update banner ─────────────────────────────────────────────── */
+
+.update-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 0.6rem 1rem;
+  margin: 0 0 1rem;
+  background: var(--accent-tint);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-m);
+  font-size: 0.9rem;
+}
+
+.update-banner-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.update-banner button {
+  font-size: 0.83rem;
+  padding: 0.35rem 0.85rem;
+}
+
+button.ghost {
+  background: none;
+  border-color: transparent;
+  box-shadow: none;
+  color: var(--muted);
+}
+
+button.ghost:hover:not(:disabled) {
+  background: var(--surface-2);
+  border-color: transparent;
+}

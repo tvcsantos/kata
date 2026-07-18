@@ -1,8 +1,8 @@
 import { contextBridge, ipcRenderer } from "electron";
-import type { KataBridge } from "../shared/bridge";
+import type { KataBridge, UpdateState } from "../shared/bridge";
 
 /**
- * The renderer-facing bridge. Only these five functions exist in the page's
+ * The renderer-facing bridge. Only these functions exist in the page's
  * world - no raw ipcRenderer, no Node globals. Channel names are fixed here;
  * the renderer cannot invoke arbitrary channels.
  */
@@ -30,6 +30,14 @@ const bridge: KataBridge = {
   setPersonas: (slugs) => ipcRenderer.invoke("kata:setPersonas", slugs),
   getTheme: () => ipcRenderer.invoke("kata:getTheme"),
   setTheme: (theme) => ipcRenderer.invoke("kata:setTheme", theme),
+  getUpdateState: () => ipcRenderer.invoke("kata:getUpdateState"),
+  checkForUpdates: () => ipcRenderer.invoke("kata:checkForUpdates"),
+  installUpdate: () => ipcRenderer.invoke("kata:installUpdate"),
+  onUpdateState: (callback) => {
+    const listener = (_event: unknown, state: UpdateState): void => callback(state);
+    ipcRenderer.on("kata:updateState", listener);
+    return () => ipcRenderer.removeListener("kata:updateState", listener);
+  },
 };
 
 contextBridge.exposeInMainWorld("kata", bridge);
