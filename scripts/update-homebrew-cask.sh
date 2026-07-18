@@ -64,7 +64,7 @@ cask "kata" do
       xattr -cr "#{appdir}/Kata.app"
   CAVEATS
 
-  zap trash: "~/Library/Application Support/@katahq/app"
+  zap trash: "~/Library/Application Support/kata"
 end
 EOF
 

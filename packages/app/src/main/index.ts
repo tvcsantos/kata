@@ -14,6 +14,11 @@ import { UpdateService } from "./update-service";
  * typed preload bridge.
  */
 
+// Store user data under "kata", not the npm package name ("@katahq/app").
+// Set before ready: Chromium creates its profile in userData at startup.
+app.setName("kata");
+app.setPath("userData", path.join(app.getPath("appData"), "kata"));
+
 const appIcon = nativeImage.createFromPath(path.join(__dirname, "../../resources/icon.png"));
 
 let mainWindow: BrowserWindow | null = null;
