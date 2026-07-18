@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- Next Version Placeholder -->
 
+## [0.12.0](https://github.com/tvcsantos/kata/compare/@katahq/app@0.11.0...@katahq/app@0.12.0) - 2026-07-18
+
+### ✨ Features
+
+- Make app single window and quit on close ([dbf3b2b](https://github.com/tvcsantos/kata/commit/dbf3b2bf6af53cf4a24937d3b720f3884c3aab36))
+
 ## [0.10.0](https://github.com/tvcsantos/kata/compare/@katahq/app@0.9.0...@katahq/app@0.10.0) - 2026-07-18
 
 ### 🐛 Bug Fixes
