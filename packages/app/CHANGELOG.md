@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- Next Version Placeholder -->
 
+## [0.6.0](https://github.com/tvcsantos/kata/compare/@katahq/app@0.5.0...@katahq/app@0.6.0) - 2026-07-18
+
+### ✨ Features
+
+- Distribute app ([7c06ef2](https://github.com/tvcsantos/kata/commit/7c06ef236eddb525791d864a5f464975344b53a4))
+
+### 🎨 Styling
+
+- Cleanup writing style ([b11c5e7](https://github.com/tvcsantos/kata/commit/b11c5e7cea2d33f81c996ecc76b41383678c2526))
+
+### 🤖 Build
+
+- Fix package conflict ([e9a57f0](https://github.com/tvcsantos/kata/commit/e9a57f044b57a22b9d09b2969647c6852cbe1aa2))
+
 ## [0.5.0](https://github.com/tvcsantos/kata/compare/@katahq/app@0.4.0...@katahq/app@0.5.0) - 2026-07-17
 
 ### ✨ Features

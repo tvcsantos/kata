@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- Next Version Placeholder -->
 
+## [0.6.0](https://github.com/tvcsantos/kata/compare/@katahq/core@0.5.0...@katahq/core@0.6.0) - 2026-07-18
+
+### 🎨 Styling
+
+- Cleanup writing style ([b11c5e7](https://github.com/tvcsantos/kata/commit/b11c5e7cea2d33f81c996ecc76b41383678c2526))
+
 ## [0.3.0](https://github.com/tvcsantos/kata/compare/@katahq/core@0.2.0...@katahq/core@0.3.0) - 2026-07-17
 
 ### ✨ Features
