@@ -1,6 +1,6 @@
 {
   "name": "@katahq/adapter-gemini",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "kata adapter for Gemini CLI (GEMINI.md, .gemini/settings.json, .gemini/commands)",
   "keywords": [
     "kata",
@@ -44,7 +44,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@katahq/core": "^0.8.0",
+    "@katahq/core": "^0.9.0",
     "smol-toml": "^1.3.0"
   }
 }

@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- Next Version Placeholder -->
 
+## [0.9.0](https://github.com/tvcsantos/kata/compare/@katahq/docs@0.8.0...@katahq/docs@0.9.0) - 2026-07-18
+
+### 🤖 Build
+
+- Fix homebrew cask quarantine ([0549562](https://github.com/tvcsantos/kata/commit/0549562f88fe0fa5ec72a03e0a533ffa1102af68))
+
 ## [0.8.0](https://github.com/tvcsantos/kata/compare/@katahq/docs@0.7.0...@katahq/docs@0.8.0) - 2026-07-18
 
 ### 🤖 Build
