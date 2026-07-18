@@ -115,7 +115,7 @@ jobs:
         with:
           script: |
             const createdTags = JSON.parse(process.env.CREATED_TAGS);
-            const app = createdTags.find((entry) => entry.moduleId === "@katahq/app");
+            const app = createdTags.find((entry) => entry.moduleId === ":packages:app");
 
             if (!app) {
               core.info("@katahq/app not bumped - skipping desktop app release");
