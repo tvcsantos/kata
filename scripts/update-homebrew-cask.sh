@@ -76,6 +76,6 @@ if git diff --cached --quiet; then
   echo "Cask already up to date for ${version}"
   exit 0
 fi
-git commit -m "kata ${version}"
+git commit -m "chore(release): update kata to ${version}"
 git push origin HEAD
 echo "Pushed cask update for kata ${version}"
